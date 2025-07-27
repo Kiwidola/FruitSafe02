@@ -60,10 +60,17 @@ html_code = f"""
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>FruitSafe</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&family=Merriweather:wght@700&display=swap');
+
+    html, body {{
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden; /* prevent scrolling */
+    }}
 
     body {{
       font-family: 'Rubik', sans-serif;
@@ -71,10 +78,11 @@ html_code = f"""
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       padding: 20px;
-      position: relative;
-      min-height: 100vh;
-      margin: 0;
+      height: 100vh;
+      box-sizing: border-box;
+      user-select: none;
     }}
 
     .logo {{
@@ -83,7 +91,6 @@ html_code = f"""
       color: #2e7d32;
       text-align: center;
       margin-bottom: 20px;
-      user-select: none;
     }}
 
     .results-label {{
@@ -93,7 +100,6 @@ html_code = f"""
       border-top: 2px solid #c5e1a5;
       border-bottom: 2px solid #c5e1a5;
       padding: 5px 20px;
-      user-select: none;
     }}
 
     .results-value {{
@@ -113,27 +119,6 @@ html_code = f"""
       min-height: 160px;
     }}
 
-    .reset-button {{
-      position: fixed;
-      bottom: 15px;
-      right: 15px;
-      background-color: #fefae0;
-      border: none;
-      color: #2e7d32;
-      font-size: 14px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow:none;
-      transition: background-color 0.3s;
-      z-index: 1000;
-      user-select: none;
-    }}
-
-    .reset-button:hover {{
-      background-color: #dcedc8;
-    }}
-
     .advice img {{
       margin-top: 12px;
       max-width: 100%;
@@ -144,8 +129,6 @@ html_code = f"""
   </style>
 </head>
 <body>
-
-  <button class="reset-button" onclick="randomScan()">รีเซ็ต</button>
 
   <div class="logo">Fruit<br>Safe</div>
 
@@ -189,19 +172,12 @@ html_code = f"""
       adviceEl.innerHTML = advice;
     }}
 
-    function randomScan() {{
-      // Optional: reset or simulate a new scan with random value
-      const randomValue = Math.floor(Math.random() * 101);
-      showPrediction(randomValue);
-    }}
-
     // Show prediction with your Python-passed value
     showPrediction({predicted_percent});
   </script>
 </body>
 </html>
 """
+st.components.v1.html(html_code, height=700, scrolling=False)
 
-
-st.components.v1.html(html_code, height=700)
 
