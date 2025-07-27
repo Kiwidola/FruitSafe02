@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FruitSafe</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&family=Merriweather:wght@700&display=swap');
+
+    body {
+      font-family: 'Rubik', sans-serif;
+      background-color: #fefae0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .logo {
+      font-family: 'Merriweather', serif;
+      font-size: 36px;
+      color: #2e7d32;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .results-label {
+      color: #e67e22;
+      font-size: 20px;
+      margin-bottom: 10px;
+      border-top: 2px solid #c5e1a5;
+      border-bottom: 2px solid #c5e1a5;
+      padding: 5px 20px;
+    }
+
+    .results-value {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #2e7d32;
+      transition: color 0.3s;
+    }
+
+    .advice {
+      font-size: 16px;
+      color: #333;
+      text-align: center;
+      max-width: 300px;
+      margin-top: 10px;
+      min-height: 160px;
+    }
+
+    .reset-button {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      background-color: #fefae0;
+      border: none;
+      color: white;
+      font-size: 14px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow:none;
+      transition: background-color 0.3s;
+      z-index: 1000;
+    }
+
+    .reset-button:hover {
+      background-color: #fefae0;
+    }
+
+    .advice img {
+      margin-top: 12px;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px none;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="reset-button" onclick="randomScan()">รีเซ็ต</button>
+
+  <div class="logo">Fruit<br>Safe</div>
+
+  <div class="results-label">ผลการตรวจ</div>
+  <div id="result" class="results-value">-</div>
+  <div id="advice" class="advice"></div>
+
+  <script>
+    function randomScan() {
+      const value = Math.floor(Math.random() * 101);
+      const resultEl = document.getElementById('result');
+      const adviceEl = document.getElementById('advice');
+
+      let color = '#2e7d32';
+      let advice = '';
+      let imgSrc = '';
+      let imgAlt = '';
+
+      if (value < 60) {
+        color = 'red';
+        advice = '<span style="font-size: 2em; color: red;">เสี่ยงสูง!</span><br>' +
+                 '<span style="font-size: 1.3em;">ควรล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span><br>';
+        imgSrc = 'guava0.png';
+        imgAlt = 'รูปความเสี่ยงสูง';
+      } else if (value < 80) {
+        color = '#e67e22';
+        advice = '<span style="font-size: 2em; color: #e67e22;">เสี่ยงปานกลาง</span><br> ' +
+                 '<span style="font-size: 1.3em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
+        imgSrc = 'guava3.png';
+        imgAlt = 'รูปความเสี่ยงปานกลาง';
+      } else {
+        color = 'green';
+        advice = '<span style="font-size: 2em; color: green;">เสี่ยงต่ำ ปลอดภัย</span>';
+        imgSrc = 'guava1.png';
+        imgAlt = 'รูปความเสี่ยงต่ำ';
+      }
+
+      advice += `<br><img src="${imgSrc}" alt="${imgAlt}">`;
+
+      resultEl.textContent = value + '%';
+      resultEl.style.color = color;
+      adviceEl.innerHTML = advice;
+    }
+  </script>
+</body>
+</html>

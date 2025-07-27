@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "rapid-spider-467202-p6",
+  "private_key_id": "1b72fc2a3442143f366198956cc4527f88c11239",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCS9htjAdwRgXec\nQp5vOSuQeOhKeU+W/do4Mv2dy8QJY97Ej3xOuz5sujAjAt7znPI0ki1qKvGAu2q4\nua/04Q/1Obh1nMsIZZjih2QRLAi09C+yIAXKa4bdZ3uTyjd6lx2CRW0cdabt61il\noWCLT5cYFf2j3Mcy11l95vZdSuYKQQYQj92cCr7upMiRS9p+YNSY1zWgYJK8Azl4\nnVilpzalpPL0gke7eC3UGxX1rcvLPLQVYhuC/61johUqiuyp7TFxnCpfRTt6Y/qO\nZ76yYyeoeASmhgL1ycY9hv/nGpVCJWMoVYUzKYG5FNo6xkUEI8IZJFw+NP1G6yzW\n6LIssw0/AgMBAAECggEARaf+7RuZinaaEeeFnuQzIOQd/gan0cJ6pz6L9Tn6rhS3\nJuV3nv2jJffODxoyQLe4GXDbs8Gs/D5Y5DunCeOPI8V7B8wMc+tr3psbtAPyEIrY\n/I2vEPWMU+7TpQYo66Mqqm9ruxyMxaJSPxdRYlaUICd0NDHV/OQTl9hcF3YDuQHG\n00convc3s++dLs4ZLhg8dr97bCdFPRGBN4leWfzIrbQOz4NEpgTi9E6GkTqj0iKe\n584dPywhS+VTz6Bl+8TqwaGaQqq00RtxmrK88bMKKXRgF3dLOyozSSBKNTXC4bX3\n8vNHIfa52rzgip8DvxGnjqqWJmPYhrSnsRJX3oEiMQKBgQDMkM3l/Ms/5O/HGQnA\nRyIdfgEo7wuVwpygpTnazQGG5NI8n9zE9WAr9qAoR1HY82HhE0cx2QsMKdT4RGvH\nxiv9mS9p8+zIkYmp03AWwO8PWKWVR8wzEYArgCmB4FUpXcsj5D6tHuVkUNvNROd/\n5joY451/BAkrcbykNkdudn0feQKBgQC36YKoh3TpM4d0e2up2iOv982AfpOFImt/\nioF/x7GW+c5EE5r8P5lt25bG4gwIOzNA1Bf8lWYNGJ3Vui97Sk1d0ni8Q3MWzEUP\nK2SCoZIPwNSsE61exIWdL0e5Zqi9rMhWYi9FSGj4toR/YPYlx09Hi/5XDPFfeMEA\n2qHM+N3MdwKBgQDMF1hlMb3yRE15XSCeZhnCRNmRZlUvmBc+Kzo6crgoRhj+hRv0\noT7O/eKx7N3azo+DyAEK2ZktDHs/KrxBdxSikfd9BPDi9ljbR2kYOmsH65BgDF7N\nQJOYUuiWfCNa/wnSCEED5cRFPmrdM/anYyHpfQXAGF2xq2rihojjy3FwOQKBgGxC\nRqlR414K+Sd2J3A6eltxMUT8PXZXRpQzQfun30ASGHs2Vzs5bOWgJ2c3VQHbZ1Y4\nA06p2wLGhNJ04NJgcJ5T8MJRqgO3hsdhMa870LD5P7dzddCdOlHGrR/T8GyGsv82\nmMDd2Pze46vftcWTR3XEUJmJguRCPspz6F6x+E4NAoGAFrYt6h+CB0P2jUbFXHuo\nyj6HfAEOm43Qs6W2M2lCqfgO0bfOzLPxG3p9hx+5MbZZT5oH/AIerbiMSScfC6AZ\nRLgSrDAC6zzzeMwXRSOY+9d8VSGsuAIEm0bzS9YSieNIQo2yrGi0IIDbbb82GH6w\n00p7mgpVVwnHS77+9kNIMaY=\n-----END PRIVATE KEY-----\n",
+  "client_email": "fruitsafe@rapid-spider-467202-p6.iam.gserviceaccount.com",
+  "client_id": "115878449511010228252",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/fruitsafe%40rapid-spider-467202-p6.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
