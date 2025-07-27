@@ -8,7 +8,7 @@ from streamlit_autorefresh import st_autorefresh
 model = joblib.load('Model.pkl')
 
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-
+st.write(st.secrets)
 credentials_info = st.secrets["gcp_service_account"].copy()
 credentials_info["private_key"] = credentials_info["private_key"].replace("\\n", "\n")
 
