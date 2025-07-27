@@ -12,8 +12,8 @@ model = joblib.load('Model.pkl')
 
 # กำหนด scope และโหลดข้อมูล service account จาก secrets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 credentials_info = st.secrets["gcp_service_account"]
-credentials_info["private_key"] = credentials_info["private_key"].replace("\\n", "\n")  # แปลง \n เป็น newline จริง
 creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 
 client = gspread.authorize(creds)
