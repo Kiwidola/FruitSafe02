@@ -3,6 +3,7 @@ from google.oauth2.service_account import Credentials
 import streamlit as st
 import joblib
 from streamlit_autorefresh import st_autorefresh
+import base64
 
 # รีเฟรชทุก 10 วินาที
 st_autorefresh(interval=10_000, key="refresh")
@@ -36,112 +37,68 @@ if len(row_data) >= 10:
         # ลบแถวแรกหลังประมวลผล
         sheet.delete_rows(1)
 
-        # HTML+CSS+JS Template ใส่ค่า predicted_percent แทนที่ {predicted_value}
-        html_code = f"""
-        <!DOCTYPE html>
-        <html lang="th">
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>FruitSafe</title>
-          <style>
-            @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&family=Merriweather:wght@700&display=swap');
-            body {{
-              font-family: 'Rubik', sans-serif;
-              background-color: #fefae0;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              padding: 20px;
-              position: relative;
-              min-height: 100vh;
-            }}
-            .logo {{
-              font-family: 'Merriweather', serif;
-              font-size: 36px;
-              color: #2e7d32;
-              text-align: center;
-              margin-bottom: 20px;
-            }}
-            .results-label {{
-              color: #e67e22;
-              font-size: 20px;
-              margin-bottom: 10px;
-              border-top: 2px solid #c5e1a5;
-              border-bottom: 2px solid #c5e1a5;
-              padding: 5px 20px;
-            }}
-            .results-value {{
-              font-size: 32px;
-              font-weight: bold;
-              margin-bottom: 10px;
-              color: #2e7d32;
-              transition: color 0.3s;
-            }}
-            .advice {{
-              font-size: 16px;
-              color: #333;
-              text-align: center;
-              max-width: 300px;
-              margin-top: 10px;
-              min-height: 160px;
-            }}
-            .advice img {{
-              margin-top: 12px;
-              max-width: 100%;
-              height: auto;
-              border-radius: 8px;
-              box-shadow: 0 2px 8px none;
-            }}
-          </style>
-        </head>
-        <body>
-          <div class="logo">Fruit<br>Safe</div>
-          <div class="results-label">ผลการตรวจ</div>
-          <div id="result" class="results-value">-</div>
-          <div id="advice" class="advice"></div>
+def img_to_base64_str(path):
+    with open(path, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
 
-          <script>
-            const value = {predicted_percent};
-            const resultEl = document.getElementById('result');
-            const adviceEl = document.getElementById('advice');
+img0_b64 = img_to_base64_str("guava0.png")
+img1_b64 = img_to_base64_str("guava1.png")
+img3_b64 = img_to_base64_str("guava3.png")
 
-            let color = '#2e7d32';
-            let advice = '';
-            let imgSrc = '';
-            let imgAlt = '';
+html_code = f"""
+<!DOCTYPE html>
+<html lang="th">
+<head> ... (your CSS) ... </head>
+<body>
+  <div id="result">-</div>
+  <div id="advice"></div>
 
-            if (value < 60) {{
-              color = 'red';
-              advice = '<span style="font-size: 2em; color: red;">เสี่ยงสูง!</span><br>' +
-                       '<span style="font-size: 1.3em;">ควรล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span><br>';
-              imgSrc = 'guava0.png';
-              imgAlt = 'รูปความเสี่ยงสูง';
-            }} else if (value < 80) {{
-              color = '#e67e22';
-              advice = '<span style="font-size: 2em; color: #e67e22;">เสี่ยงปานกลาง</span><br> ' +
-                       '<span style="font-size: 1.3em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
-              imgSrc = 'guava3.png';
-              imgAlt = 'รูปความเสี่ยงปานกลาง';
-            }} else {{
-              color = 'green';
-              advice = '<span style="font-size: 2em; color: green;">เสี่ยงต่ำ ปลอดภัย</span>';
-              imgSrc = 'guava1.png';
-              imgAlt = 'รูปความเสี่ยงต่ำ';
-            }}
+  <script>
+    function showPrediction(value) {{
+      const resultEl = document.getElementById('result');
+      const adviceEl = document.getElementById('advice');
 
-            advice += `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
+      let color = '#2e7d32';
+      let advice = '';
+      let imgSrc = '';
+      let imgAlt = '';
 
-            resultEl.textContent = value + '%';
-            resultEl.style.color = color;
-            adviceEl.innerHTML = advice;
-          </script>
-        </body>
-        </html>
-        """
+      if (value < 60) {{
+        color = 'red';
+        advice = '<span style="font-size: 2em; color: red;">เสี่ยงสูง!</span><br>' +
+                 '<span style="font-size: 1.3em;">ควรล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span><br>';
+        imgSrc = "data:image/png;base64,{img0_b64}";
+        imgAlt = 'รูปความเสี่ยงสูง';
+      }} else if (value < 80) {{
+        color = '#e67e22';
+        advice = '<span style="font-size: 2em; color: #e67e22;">เสี่ยงปานกลาง</span><br>' +
+                 '<span style="font-size: 1.3em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
+        imgSrc = "data:image/png;base64,{img3_b64}";
+        imgAlt = 'รูปความเสี่ยงปานกลาง';
+      }} else {{
+        color = 'green';
+        advice = '<span style="font-size: 2em; color: green;">เสี่ยงต่ำ ปลอดภัย</span>';
+        imgSrc = "data:image/png;base64,{img1_b64}";
+        imgAlt = 'รูปความเสี่ยงต่ำ';
+      }}
 
-        # แสดง HTML ใน Streamlit
-        st.components.v1.html(html_code, height=400)
+      advice += `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
+
+      resultEl.textContent = value + '%';
+      resultEl.style.color = color;
+      adviceEl.innerHTML = advice;
+    }}
+
+    // เรียกใช้ฟังก์ชัน พร้อมใส่ค่าจาก Python (ใส่ค่าตัวอย่าง 75)
+    showPrediction(75);
+  </script>
+</body>
+</html>
+"""
+
+st.components.v1.html(html_code, height=400)
+
 
         st.info("รอข้อมูลใหม่จาก Google Sheet...")
 
