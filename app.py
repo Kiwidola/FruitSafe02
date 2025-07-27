@@ -33,17 +33,20 @@ except Exception as e:
 if len(row_data) >= 10:
     try:
         input_data = [float(x) for x in row_data[:10]]
-        prob = model.predict_proba([input_data])[0][1]
-        predicted_percent = int(prob * 100)
-
-        st.write(f"🧪 Prediction confidence (safe): **{prob:.2f}** ({predicted_percent}%)")
-
-        if prob >= 0.80:
-            st.success("✅ Safe to eat")
-        elif prob >= 0.40:
-            st.warning("⚠️ Not sure – retest or wash thoroughly")
+        # input_data = [10 features...]
+        prob_safe = model.predict_proba([input_data])[0][0]  # ← confidence ของ class 0
+        predicted_percent = int(prob_safe * 100)
+        
+        st.write(f"🧪 Prediction confidence (safe): **{prob_safe:.2f}** ({predicted_percent}%)")
+        
+        # แบ่งออกเป็น 3 ระดับ
+        if prob_safe >= 0.80:
+            st.success("✅ ปลอดภัย สามารถรับประทานได้")
+        elif prob_safe >= 0.40:
+            st.warning("⚠️ ไม่แน่ใจ แนะนำให้ล้างให้สะอาด หรือตรวจใหม่")
         else:
-            st.error("❌ Dangerous – Do not eat")
+            st.error("❌ อันตราย ไม่ควรรับประทาน")
+
 
         try:
             sheet.delete_rows(1)
