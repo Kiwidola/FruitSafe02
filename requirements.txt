@@ -1,6 +1,6 @@
 streamlit
 gspread
-oauth2client
-joblib
+google-auth
 streamlit-autorefresh
+joblib
 scikit-learn
