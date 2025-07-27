@@ -7,21 +7,16 @@ from streamlit_autorefresh import st_autorefresh
 # Load model
 model = joblib.load('Model.pkl')
 
-# Compose credentials from secrets
-info = {
-    "private_key": st.secrets["google"]["private_key"],
-    "client_email": st.secrets["google"]["client_email"],
-    "token_uri": "https://oauth2.googleapis.com/token",
-    # add other needed fields if necessary
-}
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
 
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+credentials_info = st.secrets["gcp_service_account"]
 
-creds = Credentials.from_service_account_info(info, scopes=scope)
-
+creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 client = gspread.authorize(creds)
 sheet = client.open("FruitSafe").sheet1
-
 st.title("🍎 Fruit Pesticide Safety Checker")
 
 # Auto-refresh every 10 seconds
