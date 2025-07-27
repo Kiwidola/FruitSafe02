@@ -7,9 +7,17 @@ from streamlit_autorefresh import st_autorefresh
 # Load model
 model = joblib.load('Model.pkl')
 
-# Google Sheets setup (modern method)
-scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-creds = Credentials.from_service_account_file("FruitSafe-cred.json", scopes=scope)
+scope = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+
+# Load credentials from Streamlit secrets
+creds = Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],  # This is the dict you saved in Secrets.toml
+    scopes=scope
+)
+
 client = gspread.authorize(creds)
 sheet = client.open("FruitSafe").sheet1
 
