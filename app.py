@@ -13,7 +13,6 @@ model = joblib.load('Model.pkl')
 
 # กำหนด scope และโหลดข้อมูล service account จาก secrets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 credentials_info = st.secrets["gcp_service_account"]
 creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 
@@ -37,10 +36,19 @@ if len(row_data) >= 10:
         # ลบแถวแรกหลังประมวลผล
         sheet.delete_rows(1)
 
+        st.info("รอข้อมูลใหม่จาก Google Sheet...")
+
+    except Exception as e:
+        st.error(f"Prediction error: {e}")
+else:
+    st.info("รอข้อมูลในแถวที่ 1 ของ Google Sheet...")
+
+
 def img_to_base64_str(path):
     with open(path, "rb") as f:
         data = f.read()
     return base64.b64encode(data).decode()
+
 
 img0_b64 = img_to_base64_str("guava0.png")
 img1_b64 = img_to_base64_str("guava1.png")
@@ -49,7 +57,7 @@ img3_b64 = img_to_base64_str("guava3.png")
 html_code = f"""
 <!DOCTYPE html>
 <html lang="th">
-<head> ... (your CSS) ... </head>
+<head> ... (your CSS here) ... </head>
 <body>
   <div id="result">-</div>
   <div id="advice"></div>
@@ -90,19 +98,10 @@ html_code = f"""
       adviceEl.innerHTML = advice;
     }}
 
-    // เรียกใช้ฟังก์ชัน พร้อมใส่ค่าจาก Python (ใส่ค่าตัวอย่าง 75)
-    showPrediction(75);
+    showPrediction({predicted_percent});
   </script>
 </body>
 </html>
 """
 
 st.components.v1.html(html_code, height=400)
-
-
-        st.info("รอข้อมูลใหม่จาก Google Sheet...")
-
-    except Exception as e:
-        st.error(f"Prediction error: {e}")
-else:
-    st.info("รอข้อมูลในแถวที่ 1 ของ Google Sheet...")
