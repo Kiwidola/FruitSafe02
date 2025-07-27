@@ -19,8 +19,6 @@ creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 client = gspread.authorize(creds)
 sheet = client.open("FruitSafe").sheet1
 
-st.title("🍎 Fruit Pesticide Safety Checker")
-
 try:
     row_data = sheet.row_values(1)
 except Exception as e:
@@ -47,12 +45,9 @@ if len(row_data) >= 10:
         # ลบแถวแรกหลังประมวลผล
         sheet.delete_rows(1)
 
-        st.info("รอข้อมูลใหม่จาก Google Sheet...")
 
     except Exception as e:
         st.error(f"Prediction error: {e}")
-else:
-    st.info("รอข้อมูลในแถวที่ 1 ของ Google Sheet...")
 
 # Now build your html_code with predicted_percent safely set:
 html_code = f"""
