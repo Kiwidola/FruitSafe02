@@ -12,13 +12,10 @@ model = joblib.load('Model.pkl')
 
 # กำหนด scope และโหลดข้อมูล service account จาก secrets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-
-credentials_info = st.secrets["gcp_service_account"].copy()
-credentials_info["private_key"] = credentials_info["private_key"].replace("\\n", "\n")
-
+credentials_info = st.secrets["gcp_service_account"]
 creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
-client = gspread.authorize(creds)
 
+client = gspread.authorize(creds)
 sheet = client.open("FruitSafe").sheet1
 
 st.title("🍎 Fruit Pesticide Safety Checker")
