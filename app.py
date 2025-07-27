@@ -1,5 +1,5 @@
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2.service_account import Credentials
 import streamlit as st
 import joblib
 from streamlit_autorefresh import st_autorefresh
@@ -7,9 +7,9 @@ from streamlit_autorefresh import st_autorefresh
 # Load model
 model = joblib.load('Model.pkl')
 
-# Google Sheets setup
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("FruitSafe-cred.json", scope)
+# Google Sheets setup (modern method)
+scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+creds = Credentials.from_service_account_file("FruitSafe-cred.json", scopes=scope)
 client = gspread.authorize(creds)
 sheet = client.open("FruitSafe").sheet1
 
