@@ -6,14 +6,18 @@ from streamlit_autorefresh import st_autorefresh
 
 # Load model (ครั้งเดียว)
 model = joblib.load('Model.pkl')
-
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-st.write(st.secrets)
 
+# ✅ ดึง secrets จาก Streamlit
+credentials_info = st.secrets["gcp_service_account"]
 
+# ✅ สร้าง Credentials object
 creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
+
+# ✅ ใช้ gspread
 client = gspread.authorize(creds)
 sheet = client.open("FruitSafe").sheet1
+
 
 st.title("🍎 Fruit Pesticide Safety Checker")
 
