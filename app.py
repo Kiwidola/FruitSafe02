@@ -4,19 +4,18 @@ import streamlit as st
 import joblib
 from streamlit_autorefresh import st_autorefresh
 
-# Load model
+# Load model (ครั้งเดียว)
 model = joblib.load('Model.pkl')
 
-scope = [
-    "https://spreadsheets.google.com/feeds",
-    "https://www.googleapis.com/auth/drive"
-]
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
-credentials_info = st.secrets["gcp_service_account"]
+credentials_info = st.secrets["gcp_service_account"].copy()
+credentials_info["private_key"] = credentials_info["private_key"].replace("\\n", "\n")
 
 creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 client = gspread.authorize(creds)
 sheet = client.open("FruitSafe").sheet1
+
 st.title("🍎 Fruit Pesticide Safety Checker")
 
 # Auto-refresh every 10 seconds
@@ -43,8 +42,10 @@ if len(row_data) >= 10:
         else:
             st.error("❌ Dangerous – Do not eat")
 
-        # Delete the row after processing
-        sheet.delete_rows(1)
+        try:
+            sheet.delete_rows(1)
+        except Exception as e:
+            st.warning(f"Warning: Could not delete row: {e}")
 
         st.info("Waiting for new data...")
 
