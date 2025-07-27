@@ -5,51 +5,58 @@ import joblib
 from streamlit_autorefresh import st_autorefresh
 import base64
 
-# รีเฟรชทุก 10 วินาที
+# รีเฟรชทุก 10 วินาที (10000 ms)
 st_autorefresh(interval=10_000, key="refresh")
 
-# โหลดโมเดล
+# โหลดโมเดล (ตรวจสอบให้ Model.pkl อยู่ในโฟลเดอร์เดียวกับไฟล์นี้)
 model = joblib.load('Model.pkl')
 
-# กำหนด scope และโหลดข้อมูล service account จาก secrets
+# กำหนด scope และโหลดข้อมูล service account จาก secrets ของ Streamlit Cloud
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 credentials_info = st.secrets["gcp_service_account"]
 creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 
+# เชื่อมต่อ Google Sheet
 client = gspread.authorize(creds)
 sheet = client.open("FruitSafe").sheet1
 
+# ดึงข้อมูลแถวที่ 1 จาก Sheet
 try:
     row_data = sheet.row_values(1)
 except Exception as e:
     st.error(f"Cannot access Google Sheet: {e}")
     st.stop()
 
+# ฟังก์ชันแปลงรูปภาพเป็น base64 string สำหรับ embed ใน HTML
 def img_to_base64_str(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
+# โหลดภาพและแปลงเป็น base64
 img0_b64 = img_to_base64_str("guava0.png")
 img1_b64 = img_to_base64_str("guava1.png")
 img3_b64 = img_to_base64_str("guava3.png")
 
-
-predicted_percent = 0  # default value
+predicted_percent = 0  # ค่าเริ่มต้น ถ้าไม่มีข้อมูลหรือ error จะไม่โชว์ผล
 
 if len(row_data) >= 10:
     try:
+        # แปลงข้อมูลจาก sheet เป็น float 10 ค่าแรก
         input_data = [float(x) for x in row_data[:10]]
+        # ทำนายความปลอดภัยโดยใช้โมเดล
         prob_safe = model.predict_proba([input_data])[0][0]
         predicted_percent = int(prob_safe * 100)
 
-        # ลบแถวแรกหลังประมวลผล
+        # ลบแถวแรกหลังประมวลผล (ไม่ลบถ้ามี error)
         sheet.delete_rows(1)
-
 
     except Exception as e:
         st.error(f"Prediction error: {e}")
 
-# Now build your html_code with predicted_percent safely set:
+# เรียก JS ฟังก์ชันแสดงผลเฉพาะเมื่อมีค่า > 0 เท่านั้น
+call_show_prediction_js = f"showPrediction({predicted_percent});" if predicted_percent > 0 else ""
+
+# สร้าง HTML embed ด้วย base64 รูปและผลการทำนาย
 html_code = f"""
 <!DOCTYPE html>
 <html lang="th">
@@ -64,7 +71,7 @@ html_code = f"""
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden; /* prevent scrolling */
+      overflow: hidden; /* ป้องกันการ scroll */
     }}
 
     body {{
@@ -128,7 +135,7 @@ html_code = f"""
   <div class="logo">Fruit<br>Safe</div>
 
   <div class="results-label">ผลการตรวจ</div>
-  <div id="result" class="results-value">-</div>
+  <div id="result" class="results-value"></div>
   <div id="advice" class="advice"></div>
 
   <script>
@@ -167,12 +174,12 @@ html_code = f"""
       adviceEl.innerHTML = advice;
     }}
 
-    // Show prediction with your Python-passed value
-    showPrediction({predicted_percent});
+    // เรียกแสดงผลเฉพาะเมื่อมีข้อมูล
+    {call_show_prediction_js}
   </script>
 </body>
 </html>
 """
+
+# ฝัง HTML ลงใน Streamlit โดยไม่ให้เลื่อนหน้าจอ (scrolling=False)
 st.components.v1.html(html_code, height=700, scrolling=False)
-
-
