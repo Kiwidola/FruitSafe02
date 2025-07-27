@@ -1,20 +1,28 @@
-import streamlit as st
-from google.oauth2.service_account import Credentials
 import gspread
+from google.oauth2.service_account import Credentials
+import streamlit as st
 import joblib
+from streamlit_autorefresh import st_autorefresh
+
+# รีเฟรชทุก 10 วินาที
+st_autorefresh(interval=10_000, key="refresh")
 
 # โหลดโมเดล
 model = joblib.load('Model.pkl')
 
-# โหลด secret
+# กำหนด scope และโหลดข้อมูล service account จาก secrets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-credentials_info = st.secrets["gcp_service_account"]
-creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 
+credentials_info = st.secrets["gcp_service_account"].copy()
+credentials_info["private_key"] = credentials_info["private_key"].replace("\\n", "\n")
+
+creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 client = gspread.authorize(creds)
+
 sheet = client.open("FruitSafe").sheet1
 
-# ดึงข้อมูล
+st.title("🍎 Fruit Pesticide Safety Checker")
+
 try:
     row_data = sheet.row_values(1)
 except Exception as e:
@@ -22,90 +30,41 @@ except Exception as e:
     st.stop()
 
 if len(row_data) >= 10:
-    input_data = [float(x) for x in row_data[:10]]
-    prob_safe = model.predict_proba([input_data])[0][0]
-    predicted_percent = int(prob_safe * 100)
+    try:
+        # แปลงข้อมูลในแถวเป็น float 10 ค่า
+        input_data = [float(x) for x in row_data[:10]]
 
-    # ลบแถว
-    sheet.delete_rows(1)
+        # ใช้ model.predict_proba() และเอาความน่าจะเป็นของ class 0 (safe)
+        prob_safe = model.predict_proba([input_data])[0][0]
+        predicted_percent = int(prob_safe * 100)
 
-    # ฝัง HTML + predicted_percent
-    html_code = f"""
-    <html>
-    <head>
-    <style>
-      body {{
-        font-family: 'Sarabun', sans-serif;
-        text-align: center;
-        padding: 2em;
-      }}
-      .logo {{
-        font-size: 3em;
-        font-weight: bold;
-        color: #2c3e50;
-        margin-bottom: 1em;
-      }}
-      .results-label {{
-        font-size: 2em;
-        margin-bottom: 0.5em;
-      }}
-      .results-value {{
-        font-size: 3em;
-        font-weight: bold;
-      }}
-      .advice {{
-        margin-top: 1.5em;
-        font-size: 1.2em;
-      }}
-    </style>
-    </head>
-    <body>
-      <div class="logo">Fruit<br>Safe</div>
-      <div class="results-label">ผลการตรวจ</div>
-      <div id="result" class="results-value">-</div>
-      <div id="advice" class="advice"></div>
-      <script>
-        function showPrediction(value) {{
-          const resultEl = document.getElementById('result');
-          const adviceEl = document.getElementById('advice');
+        # ฟังก์ชันแสดงผลแบบสีและข้อความเหมือนใน HTML ตัวอย่าง
+        def display_result(value):
+            if value < 60:
+                color = "red"
+                text = "เสี่ยงสูง! ควรล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง"
+                emoji = "❌"
+            elif value < 80:
+                color = "#e67e22"
+                text = "เสี่ยงปานกลาง ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง"
+                emoji = "⚠️"
+            else:
+                color = "green"
+                text = "เสี่ยงต่ำ ปลอดภัย"
+                emoji = "✅"
+            return color, text, emoji
 
-          let color = '#2e7d32';
-          let advice = '';
-          let imgSrc = '';
-          let imgAlt = '';
+        color, advice_text, emoji = display_result(predicted_percent)
 
-          if (value < 60) {{
-            color = 'red';
-            advice = '<span style="font-size: 2em; color: red;">เสี่ยงสูง!</span><br>' +
-                     '<span style="font-size: 1.3em;">ควรล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span><br>';
-            imgSrc = 'https://i.imgur.com/QkWzX5h.png';
-            imgAlt = 'รูปความเสี่ยงสูง';
-          }} else if (value < 80) {{
-            color = '#e67e22';
-            advice = '<span style="font-size: 2em; color: #e67e22;">เสี่ยงปานกลาง</span><br> ' +
-                     '<span style="font-size: 1.3em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
-            imgSrc = 'https://i.imgur.com/mrGwFLk.png';
-            imgAlt = 'รูปความเสี่ยงปานกลาง';
-          }} else {{
-            color = 'green';
-            advice = '<span style="font-size: 2em; color: green;">เสี่ยงต่ำ ปลอดภัย</span>';
-            imgSrc = 'https://i.imgur.com/wq2jCOl.png';
-            imgAlt = 'รูปความเสี่ยงต่ำ';
-          }}
+        st.markdown(f"<h1 style='color:{color};'>{emoji} ความปลอดภัย: {predicted_percent}%</h1>", unsafe_allow_html=True)
+        st.write(advice_text)
 
-          advice += `<br><img src="${{imgSrc}}" alt="${{imgAlt}}" width="200">`;
+        # ลบแถวที่ 1 หลังประมวลผลเสร็จ
+        sheet.delete_rows(1)
 
-          resultEl.textContent = value + '%';
-          resultEl.style.color = color;
-          adviceEl.innerHTML = advice;
-        }}
-        showPrediction({predicted_percent});
-      </script>
-    </body>
-    </html>
-    """
+        st.info("รอข้อมูลใหม่จาก Google Sheet...")
 
-    st.components.v1.html(html_code, height=600, scrolling=False)
-
+    except Exception as e:
+        st.error(f"Prediction error: {e}")
 else:
-    st.info("📥 Waiting for new data in Google Sheet row 1...")
+    st.info("รอข้อมูลในแถวที่ 1 ของ Google Sheet...")
