@@ -27,6 +27,15 @@ except Exception as e:
     st.error(f"Cannot access Google Sheet: {e}")
     st.stop()
 
+def img_to_base64_str(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+img0_b64 = img_to_base64_str("guava0.png")
+img1_b64 = img_to_base64_str("guava1.png")
+img3_b64 = img_to_base64_str("guava3.png")
+
+
 predicted_percent = 0  # default value
 
 if len(row_data) >= 10:
