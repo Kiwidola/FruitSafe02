@@ -1,7 +1,7 @@
-streamlit
 gspread
 google-auth
-streamlit-autorefresh
+google-auth-oauthlib
+google-auth-httplib2
+streamlit
 joblib
-scikit-learn
-base64
+streamlit-autorefresh
