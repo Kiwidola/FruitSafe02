@@ -4,3 +4,4 @@ google-auth
 streamlit-autorefresh
 joblib
 scikit-learn
+base64
