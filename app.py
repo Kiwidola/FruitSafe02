@@ -27,6 +27,8 @@ except Exception as e:
     st.error(f"Cannot access Google Sheet: {e}")
     st.stop()
 
+predicted_percent = 0  # default value
+
 if len(row_data) >= 10:
     try:
         input_data = [float(x) for x in row_data[:10]]
@@ -43,21 +45,11 @@ if len(row_data) >= 10:
 else:
     st.info("รอข้อมูลในแถวที่ 1 ของ Google Sheet...")
 
-
-def img_to_base64_str(path):
-    with open(path, "rb") as f:
-        data = f.read()
-    return base64.b64encode(data).decode()
-
-
-img0_b64 = img_to_base64_str("guava0.png")
-img1_b64 = img_to_base64_str("guava1.png")
-img3_b64 = img_to_base64_str("guava3.png")
-
+# Now build your html_code with predicted_percent safely set:
 html_code = f"""
 <!DOCTYPE html>
 <html lang="th">
-<head> ... (your CSS here) ... </head>
+<head> ... </head>
 <body>
   <div id="result">-</div>
   <div id="advice"></div>
@@ -105,3 +97,4 @@ html_code = f"""
 """
 
 st.components.v1.html(html_code, height=400)
+
