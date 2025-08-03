@@ -22,7 +22,7 @@ sheet = client.open("FruitSafe").sheet1
 
 # ดึงข้อมูลแถวที่ 1 จาก Sheet
 try:
-    row_data = sheet.row_values(1)
+    row_data = sheet.row_values(2)
 except Exception as e:
     st.error(f"Cannot access Google Sheet: {e}")
     st.stop()
@@ -183,4 +183,5 @@ html_code = f"""
 
 # ฝัง HTML ลงใน Streamlit โดยไม่ให้เลื่อนหน้าจอ (scrolling=False)
 st.components.v1.html(html_code, height=700, scrolling=False)
+
 
