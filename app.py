@@ -183,3 +183,4 @@ html_code = f"""
 
 # ฝัง HTML ลงใน Streamlit โดยไม่ให้เลื่อนหน้าจอ (scrolling=False)
 st.components.v1.html(html_code, height=700, scrolling=False)
+
