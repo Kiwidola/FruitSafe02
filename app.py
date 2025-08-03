@@ -44,7 +44,7 @@ if len(row_data) >= 10:
         # แปลงข้อมูลจาก sheet เป็น float 10 ค่าแรก
         input_data = [float(x) for x in row_data[:10]]
         # ทำนายความปลอดภัยโดยใช้โมเดล
-        prob_safe = model.predict_proba([input_data])[0][0]
+        prob_safe = model.predict_proba([input_data])[1][1]
         predicted_percent = int(prob_safe * 100)
 
         # ลบแถวแรกหลังประมวลผล (ไม่ลบถ้ามี error)
@@ -53,7 +53,7 @@ if len(row_data) >= 10:
     except Exception as e:
         st.error(f"Prediction error: {e}")
 
-# เรียก JS ฟังก์ชันแสดงผลเฉพาะเมื่อมีค่า > 0 เท่านั้น
+# เรียก JS ฟังก์ชันแสดงผลเฉพาะเมื่อมีข้อมูล
 call_show_prediction_js = f"showPrediction({predicted_percent});" if predicted_percent > 0 else ""
 
 # สร้าง HTML embed ด้วย base64 รูปและผลการทำนาย
@@ -71,7 +71,7 @@ html_code = f"""
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden; /* ป้องกันการ scroll */
+      overflow: hidden;
     }}
 
     body {{
@@ -85,6 +85,7 @@ html_code = f"""
       height: 100vh;
       box-sizing: border-box;
       user-select: none;
+      position: relative;
     }}
 
     .logo {{
@@ -104,14 +105,6 @@ html_code = f"""
       padding: 5px 20px;
     }}
 
-    .results-value {{
-      font-size: 32px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #2e7d32;
-      transition: color 0.3s;
-    }}
-
     .advice {{
       font-size: 16px;
       color: #333;
@@ -128,6 +121,15 @@ html_code = f"""
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }}
+
+    .confidence {{
+      position: absolute;
+      bottom: 12px;
+      right: 16px;
+      font-size: 14px;
+      color: #666;
+      font-style: italic;
+    }}
   </style>
 </head>
 <body>
@@ -135,46 +137,44 @@ html_code = f"""
   <div class="logo">Fruit<br>Safe</div>
 
   <div class="results-label">ผลการตรวจ</div>
-  <div id="result" class="results-value"></div>
   <div id="advice" class="advice"></div>
+  <div id="confidence" class="confidence"></div>
 
   <script>
     function showPrediction(value) {{
-      const resultEl = document.getElementById('result');
       const adviceEl = document.getElementById('advice');
+      const confEl = document.getElementById('confidence');
 
       let color = '#2e7d32';
       let advice = '';
       let imgSrc = '';
       let imgAlt = '';
 
-      if (value < 60) {{
-        color = 'red';
-        advice = '<span style="font-size: 2em; color: red;">เสี่ยงสูง!</span><br>' +
-                 '<span style="font-size: 1.3em;">ควรล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span><br>';
-        imgSrc = "data:image/png;base64,{img0_b64}";
-        imgAlt = 'รูปความเสี่ยงสูง';
-      }} else if (value < 80) {{
+      if (value <= 20) {{
+        color = 'green';
+        advice = '<span style="font-size: 2em; color: green;">ปลอดภัย</span>';
+        imgSrc = "data:image/png;base64,{img1_b64}";
+        imgAlt = 'รูปปลอดภัย';
+      }} else if (value <= 40) {{
         color = '#e67e22';
         advice = '<span style="font-size: 2em; color: #e67e22;">เสี่ยงปานกลาง</span><br>' +
                  '<span style="font-size: 1.3em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
         imgSrc = "data:image/png;base64,{img3_b64}";
-        imgAlt = 'รูปความเสี่ยงปานกลาง';
+        imgAlt = 'รูปเสี่ยงปานกลาง';
       }} else {{
-        color = 'green';
-        advice = '<span style="font-size: 2em; color: green;">เสี่ยงต่ำ ปลอดภัย</span>';
-        imgSrc = "data:image/png;base64,{img1_b64}";
-        imgAlt = 'รูปความเสี่ยงต่ำ';
+        color = 'red';
+        advice = '<span style="font-size: 2em; color: red;">เสี่ยงสูง!</span><br>' +
+                 '<span style="font-size: 1.3em;">ควรล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span>';
+        imgSrc = "data:image/png;base64,{img0_b64}";
+        imgAlt = 'รูปเสี่ยงสูง';
       }}
 
       advice += `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
 
-      resultEl.textContent = value + '%';
-      resultEl.style.color = color;
       adviceEl.innerHTML = advice;
+      confEl.innerHTML = `Confidence: ${value}%`;
     }}
 
-    // เรียกแสดงผลเฉพาะเมื่อมีข้อมูล
     {call_show_prediction_js}
   </script>
 </body>
@@ -183,5 +183,6 @@ html_code = f"""
 
 # ฝัง HTML ลงใน Streamlit โดยไม่ให้เลื่อนหน้าจอ (scrolling=False)
 st.components.v1.html(html_code, height=700, scrolling=False)
+
 
 
