@@ -103,14 +103,12 @@ html_code = f"""
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 0;
+      padding: 10px;
       height: 100vh;
       width: 100vw;
       box-sizing: border-box;
       user-select: none;
-      position: fixed;
-      top: 0;
-      left: 0;
+      position: relative;
     }}
 
     .logo {{
@@ -148,12 +146,13 @@ html_code = f"""
     }}
 
     .confidence {{
-      position: absolute;
+      position: fixed;
       bottom: 10px;
       right: 12px;
       font-size: 12px;
       color: #666;
       font-style: italic;
+      z-index: 1000;
     }}
   </style>
 </head>
