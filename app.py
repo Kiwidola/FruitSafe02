@@ -53,8 +53,14 @@ if len(row_data) >= 10:
 
 # เรียก JS ฟังก์ชันเมื่อมีผลลัพธ์ หรือแสดงสถานะเริ่มต้น
 if len(row_data) >= 10:
+    # มีข้อมูลใหม่ - แสดงผลลัพธ์ใหม่และบันทึก
     call_show_prediction_js = f"showPrediction({predicted_percent});"
+    st.session_state.last_prediction = predicted_percent
+elif 'last_prediction' in st.session_state and st.session_state.last_prediction > 0:
+    # ไม่มีข้อมูลใหม่ แต่มีผลลัพธ์ล่าสุด - แสดงผลลัพธ์ล่าสุด
+    call_show_prediction_js = f"showPrediction({st.session_state.last_prediction});"
 else:
+    # ไม่มีข้อมูลและไม่มีผลลัพธ์ล่าสุด - แสดงสถานะรอ
     call_show_prediction_js = "showDefaultState();"
 
 # ซ่อน Header / Footer / Menu ของ Streamlit
