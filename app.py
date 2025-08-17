@@ -62,17 +62,6 @@ st.markdown("""
     footer {visibility: hidden;}
     [data-testid="stAppViewContainer"] {
         background-color: #fefae0;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-    [data-testid="stAppViewBlockContainer"] {
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-    .main .block-container {
-        padding: 0 !important;
-        margin: 0 !important;
-        max-width: none !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -91,11 +80,8 @@ html_code = f"""
     html, body {{
       margin: 0;
       padding: 0;
-      height: 100vh;
-      width: 100vw;
+      height: 100%;
       overflow: hidden;
-      min-height: 100vh;
-      min-width: 100vw;
     }}
 
     body {{
@@ -107,9 +93,6 @@ html_code = f"""
       justify-content: center;
       padding: 10px;
       height: 100vh;
-      width: 100vw;
-      min-height: 100vh;
-      min-width: 100vw;
       box-sizing: border-box;
       user-select: none;
       position: relative;
@@ -121,8 +104,6 @@ html_code = f"""
       color: #2e7d32;
       text-align: center;
       margin-bottom: 15px;
-      z-index: 1001;
-      position: relative;
     }}
 
     .results-label {{
@@ -132,8 +113,6 @@ html_code = f"""
       border-top: 2px solid #c5e1a5;
       border-bottom: 2px solid #c5e1a5;
       padding: 4px 12px;
-      z-index: 1001;
-      position: relative;
     }}
 
     .advice {{
@@ -143,8 +122,6 @@ html_code = f"""
       max-width: 90vw;
       margin-top: 10px;
       min-height: 140px;
-      z-index: 1001;
-      position: relative;
     }}
 
     .advice img {{
@@ -156,13 +133,12 @@ html_code = f"""
     }}
 
     .confidence {{
-      position: fixed;
+      position: absolute;
       bottom: 10px;
       right: 12px;
       font-size: 12px;
       color: #666;
       font-style: italic;
-      z-index: 1000;
     }}
   </style>
 </head>
@@ -211,4 +187,4 @@ html_code = f"""
 </html>
 """
 
-st.components.v1.html(html_code, height=0, scrolling=False)
+st.components.v1.html(html_code, height=700, scrolling=False)
