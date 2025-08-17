@@ -94,6 +94,8 @@ html_code = f"""
       height: 100vh;
       width: 100vw;
       overflow: hidden;
+      min-height: 100vh;
+      min-width: 100vw;
     }}
 
     body {{
@@ -106,6 +108,8 @@ html_code = f"""
       padding: 10px;
       height: 100vh;
       width: 100vw;
+      min-height: 100vh;
+      min-width: 100vw;
       box-sizing: border-box;
       user-select: none;
       position: relative;
@@ -117,6 +121,8 @@ html_code = f"""
       color: #2e7d32;
       text-align: center;
       margin-bottom: 15px;
+      z-index: 1001;
+      position: relative;
     }}
 
     .results-label {{
@@ -126,6 +132,8 @@ html_code = f"""
       border-top: 2px solid #c5e1a5;
       border-bottom: 2px solid #c5e1a5;
       padding: 4px 12px;
+      z-index: 1001;
+      position: relative;
     }}
 
     .advice {{
@@ -135,6 +143,8 @@ html_code = f"""
       max-width: 90vw;
       margin-top: 10px;
       min-height: 140px;
+      z-index: 1001;
+      position: relative;
     }}
 
     .advice img {{
