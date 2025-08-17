@@ -62,6 +62,17 @@ st.markdown("""
     footer {visibility: hidden;}
     [data-testid="stAppViewContainer"] {
         background-color: #fefae0;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    [data-testid="stAppViewBlockContainer"] {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .main .block-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: none !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -80,7 +91,8 @@ html_code = f"""
     html, body {{
       margin: 0;
       padding: 0;
-      height: 100%;
+      height: 100vh;
+      width: 100vw;
       overflow: hidden;
     }}
 
@@ -91,11 +103,14 @@ html_code = f"""
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 10px;
+      padding: 0;
       height: 100vh;
+      width: 100vw;
       box-sizing: border-box;
       user-select: none;
-      position: relative;
+      position: fixed;
+      top: 0;
+      left: 0;
     }}
 
     .logo {{
@@ -187,5 +202,4 @@ html_code = f"""
 </html>
 """
 
-st.components.v1.html(html_code, height=700, scrolling=False)
-
+st.components.v1.html(html_code, height=0, scrolling=False)
