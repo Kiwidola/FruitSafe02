@@ -52,7 +52,7 @@ if len(row_data) >= 10:
         st.error(f"Prediction error: {e}")
 
 # เรียก JS ฟังก์ชันเมื่อมีผลลัพธ์
-call_show_prediction_js = f"showPrediction({predicted_percent});" if predicted_percent > 0 else ""
+call_show_prediction_js = f"showPrediction({predicted_percent});"
 
 # ซ่อน Header / Footer / Menu ของ Streamlit
 st.markdown("""
