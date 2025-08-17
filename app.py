@@ -116,8 +116,6 @@ html_code = f"""
     flex-direction:column;
     align-items:center;
     gap:20px;
-    max-height: 90vh;
-    overflow-y: auto;
   }}
 
   .results-label {{
