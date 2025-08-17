@@ -247,6 +247,8 @@ html_code = f"""
 </head>
 <body>
   <div class="card" role="region" aria-label="ผลการตรวจ Fruit Safe">
+    <div class="logo">Fruit<br>Safe</div>
+
     <div class="results-label">ผลการตรวจ</div>
 
     <div class="result" role="status" aria-live="polite">
