@@ -122,11 +122,12 @@ html_code = f"""
     text-align: center;
   }}
 
-  .logo img {{
-    max-width: 190px;
-    height: auto;
-    display: block;
-    margin: 0 auto 20px;
+  .logo {{
+    font-family: 'Merriweather', serif;
+    font-size: 28px;
+    color: #2e7d32;
+    text-align: center;
+    margin-bottom: 15px;
   }}
 
   .result{{
