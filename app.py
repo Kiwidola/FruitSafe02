@@ -44,7 +44,7 @@ if len(row_data) >= 10:
         # แปลงข้อมูลจาก sheet เป็น float 10 ค่าแรก
         input_data = [float(x) for x in row_data[:10]]
         # ทำนายความปลอดภัยโดยใช้โมเดล
-        prob_safe = model.predict_proba([input_data])[1][1]
+        prob_safe = model.predict_proba([input_data])[0][1]
         predicted_percent = int(prob_safe * 100)
 
         # ลบแถวแรกหลังประมวลผล (ไม่ลบถ้ามี error)
@@ -183,6 +183,7 @@ html_code = f"""
 
 # ฝัง HTML ลงใน Streamlit โดยไม่ให้เลื่อนหน้าจอ (scrolling=False)
 st.components.v1.html(html_code, height=700, scrolling=False)
+
 
 
 
