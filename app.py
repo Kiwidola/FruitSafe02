@@ -111,21 +111,22 @@ html_code = f"""
     width: clamp(260px, 90vw, var(--card-w));
     background: linear-gradient(#fff0, rgba(0,0,0,0));
     border-radius:14px;
-    padding:22px 18px;
+    padding:12px 18px;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:20px;
+    gap:12px;
+    max-height: 80vh;
   }}
 
   .results-label {{
     color: #e67e22;
-    font-size: 18px;
+    font-size: 15px;
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     border-top: 2px solid #c5e1a5;
     border-bottom: 2px solid #c5e1a5;
-    padding: 8px 20px;
+    padding: 5px 20px;
     text-align: center;
   }}
 
@@ -139,10 +140,10 @@ html_code = f"""
 
   .logo {{
     font-family: 'Merriweather', serif;
-    font-size: 28px;
+    font-size: 22px;
     color: #2e7d32;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
   }}
 
   .result{{
@@ -150,8 +151,8 @@ html_code = f"""
   }}
 
   .image-wrap{{
-    width: 85%;
-    max-width:220px;
+    width: 70%;
+    max-width:160px;
     aspect-ratio: 1.8/1;
     position:relative;
     display:flex;
