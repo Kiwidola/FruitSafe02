@@ -247,12 +247,6 @@ html_code = f"""
 </head>
 <body>
   <div class="card" role="region" aria-label="ผลการตรวจ Fruit Safe">
-    <div class="logo" aria-hidden="false">
-      <img src="data:image/png;base64,{img1_b64}" alt="FruitSafe Logo" style="max-width: 190px; height: auto;" />
-    </div>
-
-    <div class="divider" aria-hidden="true"></div>
-
     <div class="results-label">ผลการตรวจ</div>
 
     <div class="result" role="status" aria-live="polite">
@@ -261,7 +255,7 @@ html_code = f"""
     </div>
 
     <div class="image-wrap" aria-hidden="true">
-      <img id="fruitImage" src="data:image/png;base64,{img1_b64}" alt="รูปฝรั่ง" class="fruit">
+      <img id="fruitImage" src="guava.jpg" alt="รูปฝรั่ง" class="fruit">
     </div>
 
     <div class="meta">
@@ -277,11 +271,9 @@ html_code = f"""
         <span class="arrow">▼</span>
       </button>
       <div id="info1" class="toggle-content" hidden>
-        <img src="data:image/png;base64,{img0_b64}" alt="โปสเตอร์สารเคมี organophosphate และ Carbamate" style="max-width:100%; height:auto;">
+        <img src="poster .png" alt="โปสเตอร์สารเคมี organophosphate และ Carbamate" style="max-width:100%; height:auto;">
       </div>
     </div>
-
-    <button class="reset-link" onclick="randomScan()">reset</button>
   </div>
 
 <script>
@@ -313,46 +305,6 @@ html_code = f"""
                '<span style="font-size: 1.3em;">ต้องล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span><br>';
       imgSrc = "data:image/png;base64,{img0_b64}";
       imgAlt = 'รูปความเสี่ยงสูง';
-    }}
-
-    resultEl.textContent = '';
-    percentEl.innerHTML = '<small>สารตกค้าง</small> ' + value + '%';
-    percentEl.style.color = color;
-    adviceEl.innerHTML = advice;
-    fruitImg.src = imgSrc;
-    fruitImg.alt = imgAlt;
-  }}
-
-  function randomScan() {{
-    const adviceEl = document.getElementById('advice');
-    const fruitImg = document.getElementById('fruitImage');
-    const resultEl = document.getElementById('result');
-    const percentEl = document.getElementById('percentDisplay');
-
-    const value = Math.floor(Math.random() * 101);
-
-    let color = '';
-    let advice = '';
-    let imgSrc = '';
-    let imgAlt = '';
-
-    if (value < 60) {{
-      color = 'red';
-      advice = '<span style="font-size: 2em; color: red;">เสี่ยงสูง!</span><br>' +
-               '<span style="font-size: 1.3em;">ต้องล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span><br>';
-      imgSrc = "data:image/png;base64,{img0_b64}";
-      imgAlt = 'รูปความเสี่ยงสูง';
-    }} else if (value < 80) {{
-      color = '#e67e22';
-      advice = '<span style="font-size: 2em; color: #e67e22;">เสี่ยงปานกลาง</span><br> ' +
-               '<span style="font-size: 1.3em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
-      imgSrc = "data:image/png;base64,{img3_b64}";
-      imgAlt = 'รูปความเสี่ยงปานกลาง';
-    }} else {{
-      color = 'green';
-      advice = '<span style="font-size: 2em; color: green;">เสี่ยงต่ำ ปลอดภัย</span>';
-      imgSrc = "data:image/png;base64,{img1_b64}";
-      imgAlt = 'รูปความเสี่ยงต่ำ';
     }}
 
     resultEl.textContent = '';
