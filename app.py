@@ -46,7 +46,7 @@ if len(row_data) >= 10:
         predicted_percent = int(prob_safe * 100)
 
         # ลบแถวที่ 1 หลังประมวลผล
-        sheet.delete_rows(2)
+        sheet.delete_rows(1)
 
     except Exception as e:
         st.error(f"Prediction error: {e}")
