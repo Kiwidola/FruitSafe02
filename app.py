@@ -5,8 +5,8 @@ import joblib
 from streamlit_autorefresh import st_autorefresh
 import base64
 
-# รีเฟรชทุก 10 วินาที (10000 ms)
-st_autorefresh(interval=10_000, key="refresh")
+# ตรวจสอบการอัปเดตข้อมูลทุก 2 วินาที
+st_autorefresh(interval=2_000, key="refresh")
 
 # โหลดโมเดล
 model = joblib.load('Model.pkl')
@@ -20,9 +20,27 @@ creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 client = gspread.authorize(creds)
 sheet = client.open("FruitSafe01").sheet1
 
-# ดึงข้อมูลแถวที่ 2 จาก Sheet
+# ตรวจสอบการเปลี่ยนแปลงของข้อมูลในแถวที่ 2
 try:
     row_data = sheet.row_values(2)
+    
+    # ตรวจสอบว่าเป็นข้อมูลใหม่หรือไม่
+    if 'previous_row_data' not in st.session_state:
+        st.session_state.previous_row_data = []
+        st.session_state.has_new_data = False
+    else:
+        # เปรียบเทียบข้อมูลปัจจุบันกับข้อมูลก่อนหน้า
+        current_data_str = str(row_data[:10]) if len(row_data) >= 10 else str(row_data)
+        previous_data_str = str(st.session_state.previous_row_data[:10]) if len(st.session_state.previous_row_data) >= 10 else str(st.session_state.previous_row_data)
+        
+        if current_data_str != previous_data_str and len(row_data) >= 10:
+            st.session_state.has_new_data = True
+        else:
+            st.session_state.has_new_data = False
+    
+    # อัปเดตข้อมูลก่อนหน้า
+    st.session_state.previous_row_data = row_data.copy() if row_data else []
+    
 except Exception as e:
     st.error(f"Cannot access Google Sheet: {e}")
     st.stop()
@@ -39,20 +57,36 @@ img3_b64 = img_to_base64_str("guava3.png")
 
 predicted_percent = 0  # ค่าเริ่มต้น
 
-if len(row_data) >= 10:
+# ประมวลผลเฉพาะเมื่อมีข้อมูลใหม่
+if st.session_state.has_new_data and len(row_data) >= 10:
     try:
         input_data = [float(x) for x in row_data[:10]]
         prob_safe = model.predict_proba([input_data])[0][1]
         predicted_percent = int(prob_safe * 100)
 
-        # ลบแถวที่ 1 หลังประมวลผล
+        # ลบแถวที่ 2 หลังประมวลผล
         sheet.delete_rows(2)
+        
+        # รีเซ็ตสถานะ
+        st.session_state.has_new_data = False
 
     except Exception as e:
         st.error(f"Prediction error: {e}")
 
-# เรียก JS ฟังก์ชันเมื่อมีผลลัพธ์
-call_show_prediction_js = f"showPrediction({predicted_percent});"
+# เรียก JS ฟังก์ชันเมื่อมีผลลัพธ์ หรือแสดงสถานะเริ่มต้น
+if st.session_state.has_new_data and len(row_data) >= 10:
+    call_show_prediction_js = f"showPrediction({predicted_percent});"
+elif len(row_data) >= 10:
+    # แสดงผลลัพธ์ล่าสุดถ้ามีข้อมูลแต่ไม่ใช่ข้อมูลใหม่
+    if 'last_prediction' not in st.session_state:
+        st.session_state.last_prediction = 0
+    call_show_prediction_js = f"showPrediction({st.session_state.last_prediction});"
+else:
+    call_show_prediction_js = "showDefaultState();"
+
+# บันทึกผลลัพธ์ล่าสุด
+if predicted_percent > 0:
+    st.session_state.last_prediction = predicted_percent
 
 # ซ่อน Header / Footer / Menu ของ Streamlit
 st.markdown("""
@@ -177,11 +211,19 @@ html_code = f"""
 
       advice += `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
 
-      adviceEl.innerHTML = advice;
-      confEl.innerHTML = `Confidence: ${{value}}%`;
-    }}
+             adviceEl.innerHTML = advice;
+       confEl.innerHTML = `Confidence: ${{value}}%`;
+     }}
 
-    {call_show_prediction_js}
+     function showDefaultState() {{
+       const adviceEl = document.getElementById('advice');
+       const confEl = document.getElementById('confidence');
+       
+       adviceEl.innerHTML = '<span style="font-size: 1.4em; color: #666;">รอข้อมูล...</span>';
+       confEl.innerHTML = '';
+     }}
+
+     {call_show_prediction_js}
   </script>
 </body>
 </html>
