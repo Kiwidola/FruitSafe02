@@ -62,6 +62,17 @@ st.markdown("""
     footer {visibility: hidden;}
     [data-testid="stAppViewContainer"] {
         background-color: #fefae0;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    [data-testid="stAppViewBlockContainer"] {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .main .block-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: none !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -84,33 +95,39 @@ html_code = f"""
 
   body{{
     margin:0;
-    min-height:100vh;
+    padding:0;
+    height:100vh;
+    width:100vw;
+    overflow:hidden;
     display:flex;
     align-items:center;
     justify-content:center;
     background:var(--cream);
     font-family: 'Rubik', 'Merriweather', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    box-sizing: border-box;
   }}
 
   .card{{
-    width: clamp(260px, 38vw, var(--card-w));
+    width: clamp(260px, 90vw, var(--card-w));
     background: linear-gradient(#fff0, rgba(0,0,0,0));
     border-radius:14px;
     padding:22px 18px;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:14px;
+    gap:20px;
+    max-height: 90vh;
+    overflow-y: auto;
   }}
 
   .results-label {{
     color: #e67e22;
     font-size: 18px;
-    margin-top: -48px;
-    margin-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 20px;
     border-top: 2px solid #c5e1a5;
     border-bottom: 2px solid #c5e1a5;
-    padding: 5px 20px;
+    padding: 8px 20px;
     text-align: center;
   }}
 
@@ -343,4 +360,4 @@ html_code = f"""
 </html>
 """
 
-st.components.v1.html(html_code, height=800, scrolling=False)
+st.components.v1.html(html_code, height=0, scrolling=False)
