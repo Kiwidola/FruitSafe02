@@ -172,7 +172,7 @@ html_code = f"""
       advice += `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
 
       adviceEl.innerHTML = advice;
-      confEl.innerHTML = `Confidence: ${value}%`;
+      confEl.innerHTML = `Confidence: ${{value}}%`;
     }}
 
     {call_show_prediction_js}
@@ -183,6 +183,7 @@ html_code = f"""
 
 # ฝัง HTML ลงใน Streamlit โดยไม่ให้เลื่อนหน้าจอ (scrolling=False)
 st.components.v1.html(html_code, height=700, scrolling=False)
+
 
 
 
