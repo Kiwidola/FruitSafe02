@@ -51,11 +51,8 @@ if len(row_data) >= 10:
     except Exception as e:
         st.error(f"Prediction error: {e}")
 
-# เรียก JS ฟังก์ชันเมื่อมีผลลัพธ์ หรือแสดงสถานะเริ่มต้น
-if predicted_percent > 0:
-    call_show_prediction_js = f"showPrediction({predicted_percent});"
-else:
-    call_show_prediction_js = "showDefaultState();"
+# เรียก JS ฟังก์ชันเมื่อมีผลลัพธ์
+call_show_prediction_js = f"showPrediction({predicted_percent});" if predicted_percent > 0 else ""
 
 # ซ่อน Header / Footer / Menu ของ Streamlit
 st.markdown("""
@@ -65,315 +62,129 @@ st.markdown("""
     footer {visibility: hidden;}
     [data-testid="stAppViewContainer"] {
         background-color: #fefae0;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-    [data-testid="stAppViewBlockContainer"] {
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-    .main .block-container {
-        padding: 0 !important;
-        margin: 0 !important;
-        max-width: none !important;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # HTML ฝังผลลัพธ์
 html_code = f"""
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Fruit Safe Card</title>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&family=Merriweather:wght@700&display=swap" rel="stylesheet" />
-<style>
-  :root{{
-    --cream: #fef8e5;
-    --green: #2f8b3e;   
-    --card-w: 320px;
-  }}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>FruitSafe</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&family=Merriweather:wght@700&display=swap');
 
-  body{{
-    margin:0;
-    padding:0;
-    height:100vh;
-    width:100vw;
-    overflow:hidden;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:var(--cream);
-    font-family: 'Rubik', 'Merriweather', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    box-sizing: border-box;
-  }}
+    html, body {{
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }}
 
-  .card{{
-    width: clamp(260px, 90vw, var(--card-w));
-    background: linear-gradient(#fff0, rgba(0,0,0,0));
-    border-radius:14px;
-    padding:12px 18px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-    max-height: 80vh;
-  }}
+    body {{
+      font-family: 'Rubik', sans-serif;
+      background-color: #fefae0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      height: 100vh;
+      box-sizing: border-box;
+      user-select: none;
+      position: relative;
+    }}
 
-  .results-label {{
-    color: #e67e22;
-    font-size: 15px;
-    margin-top: 0;
-    margin-bottom: 12px;
-    border-top: 2px solid #c5e1a5;
-    border-bottom: 2px solid #c5e1a5;
-    padding: 5px 20px;
-    text-align: center;
-  }}
+    .logo {{
+      font-family: 'Merriweather', serif;
+      font-size: 28px;
+      color: #2e7d32;
+      text-align: center;
+      margin-bottom: 15px;
+    }}
 
-  .results-value {{
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    transition: color 0.3s;
-    text-align: center;
-  }}
+    .results-label {{
+      color: #e67e22;
+      font-size: 18px;
+      margin-bottom: 8px;
+      border-top: 2px solid #c5e1a5;
+      border-bottom: 2px solid #c5e1a5;
+      padding: 4px 12px;
+    }}
 
-  .logo {{
-    font-family: 'Merriweather', serif;
-    font-size: 22px;
-    color: #2e7d32;
-    text-align: center;
-    margin-bottom: 8px;
-  }}
+    .advice {{
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+      max-width: 90vw;
+      margin-top: 10px;
+      min-height: 140px;
+    }}
 
-  .result{{
-    text-align:center;
-  }}
+    .advice img {{
+      margin-top: 10px;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }}
 
-  .image-wrap{{
-    width: 70%;
-    max-width:160px;
-    aspect-ratio: 1.8/1;
-    position:relative;
-    display:flex;
-    flex-direction: column;
-    align-items:center;
-    justify-content:center;
-  }}
-
-  .fruit{{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    border-radius:12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-    display:block;
-  }}
-
-  .meta{{
-    width:100%;
-    display:flex;
-    flex-direction: column;
-    align-items:center;
-    gap: 12px;
-  }}
-
-  .percent {{
-    font-size: 24px;
-    font-weight: 700;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }}
-
-  .percent small {{
-    font-size: 14px;
-    color: #000000;
-    font-weight: 500;
-  }}
-
-  .btn{{
-    width:85%;
-    max-width:240px;
-    padding:12px;
-    border-radius:10px;
-    border:2px solid #2e7d32;
-    background: #fffdf7;
-    text-align:center;
-    font-weight:560;
-    cursor:pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    font-family: 'Rubik', sans-serif;
-    font-size: 1em;
-  }}
-
-  .reset-link {{
-    margin-top: 12px;
-    font-size: 14px;
-    color: #000000;
-    font-family: 'Rubik', sans-serif;
-    background: none;
-    border: none;
-    cursor: pointer;
-    align-self: center;
-  }}
-
-  .button-group {{
-    width: 85%;
-    max-width: 240px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    justify-content: center;
-  }}
-
-  .toggle-btn {{
-    width: 100%;
-    background: none;
-    border: none;
-    font-size: 0.9em;
-    font-weight: 565;
-    color: var(--green);
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0;
-  }}
-
-  .arrow {{
-    display: inline-block;
-    transition: transform 0.3s ease;
-    font-weight: 700;
-    font-size: 1.2em;
-  }}
-
-  .toggle-btn[aria-expanded="true"] .arrow {{
-    transform: rotate(180deg);
-  }}
-
-  .toggle-content {{
-    margin-top: 10px;
-    font-size: 0.95em;
-    line-height: 1.4;
-    color: #333;
-  }}
-</style>
+    .confidence {{
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      font-size: 12px;
+      color: #666;
+      font-style: italic;
+    }}
+  </style>
 </head>
 <body>
-  <div class="card" role="region" aria-label="ผลการตรวจ Fruit Safe">
-    <div class="logo">Fruit<br>Safe</div>
 
-    <div class="results-label">ผลการตรวจ</div>
+  <div class="logo">Fruit<br>Safe</div>
 
-    <div class="result" role="status" aria-live="polite">
-      <div id="result" class="results-value"></div>
-      <div id="advice" class="sub">-</div>
-    </div>
+  <div class="results-label">ผลการตรวจ</div>
+  <div id="advice" class="advice"></div>
+  <div id="confidence" class="confidence"></div>
 
-    <div class="image-wrap" aria-hidden="true">
-      <img id="fruitImage" src="guava.jpg" alt="รูปฝรั่ง" class="fruit">
-    </div>
+  <script>
+    function showPrediction(value) {{
+      const adviceEl = document.getElementById('advice');
+      const confEl = document.getElementById('confidence');
 
-    <div class="meta">
-      <div class="percent" id="percentDisplay"><small>สารตกค้าง</small> --%</div>
-      <div class="button-group">
-        <button class="btn" onclick="openLink()">วิธีการล้างฝรั่ง</button>
-      </div>
-    </div>
+      let advice = '';
+      let imgSrc = '';
+      let imgAlt = '';
 
-    <div class="toggle-section" style="margin-top:-2px;">
-      <button class="toggle-btn" aria-expanded="false" aria-controls="info1" onclick="toggleInfo('info1', this)">
-         <span style="border-bottom: 2px solid #2f8b3e;">สารเคมีผลกระทบคืออะไร</span>
-        <span class="arrow">▼</span>
-      </button>
-      <div id="info1" class="toggle-content" hidden>
-        <img src="poster .png" alt="โปสเตอร์สารเคมี organophosphate และ Carbamate" style="max-width:100%; height:auto;">
-      </div>
-    </div>
-  </div>
+      if (value <= 20) {{
+        advice = '<span style="font-size: 1.6em; color: green;">ปลอดภัย</span>';
+        imgSrc = "data:image/png;base64,{img1_b64}";
+        imgAlt = 'รูปปลอดภัย';
+      }} else if (value <= 40) {{
+        advice = '<span style="font-size: 1.6em; color: #e67e22;">เสี่ยงปานกลาง</span><br>' +
+                 '<span style="font-size: 1.1em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
+        imgSrc = "data:image/png;base64,{img3_b64}";
+        imgAlt = 'รูปเสี่ยงปานกลาง';
+      }} else {{
+        advice = '<span style="font-size: 1.6em; color: red;">เสี่ยงสูง!</span><br>' +
+                 '<span style="font-size: 1.1em;">ควรล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span>';
+        imgSrc = "data:image/png;base64,{img0_b64}";
+        imgAlt = 'รูปเสี่ยงสูง';
+      }}
 
-<script>
-  function showPrediction(value) {{
-    const adviceEl = document.getElementById('advice');
-    const fruitImg = document.getElementById('fruitImage');
-    const resultEl = document.getElementById('result');
-    const percentEl = document.getElementById('percentDisplay');
+      advice += `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
 
-    let color = '';
-    let advice = '';
-    let imgSrc = '';
-    let imgAlt = '';
-
-    if (value <= 20) {{
-      color = 'green';
-      advice = '<span style="font-size: 2em; color: green;">เสี่ยงต่ำ ปลอดภัย</span>';
-      imgSrc = "data:image/png;base64,{img1_b64}";
-      imgAlt = 'รูปความเสี่ยงต่ำ';
-    }} else if (value <= 40) {{
-      color = '#e67e22';
-      advice = '<span style="font-size: 2em; color: #e67e22;">เสี่ยงปานกลาง</span><br> ' +
-               '<span style="font-size: 1.3em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
-      imgSrc = "data:image/png;base64,{img3_b64}";
-      imgAlt = 'รูปความเสี่ยงปานกลาง';
-    }} else {{
-      color = 'red';
-      advice = '<span style="font-size: 2em; color: red;">เสี่ยงสูง!</span><br>' +
-               '<span style="font-size: 1.3em;">ต้องล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span><br>';
-      imgSrc = "data:image/png;base64,{img0_b64}";
-      imgAlt = 'รูปความเสี่ยงสูง';
+      adviceEl.innerHTML = advice;
+      confEl.innerHTML = `Confidence: ${{value}}%`;
     }}
 
-    resultEl.textContent = '';
-    percentEl.innerHTML = '<small>สารตกค้าง</small> ' + value + '%';
-    percentEl.style.color = color;
-    adviceEl.innerHTML = advice;
-    fruitImg.src = imgSrc;
-    fruitImg.alt = imgAlt;
-  }}
-
-  function openLink() {{
-    const url = prompt('วิธีการล้างฝรั่ง:', 'https://youtube.com/shorts/H2OW4IHmfYM?feature=share/');
-    if (url) {{
-      window.location.href = url;
-    }}
-  }}
-
-  function toggleInfo(id, btn) {{
-    const content = document.getElementById(id);
-    const expanded = btn.getAttribute("aria-expanded") === "true";
-    if (expanded) {{
-      content.hidden = true;
-      btn.setAttribute("aria-expanded", "false");
-    }} else {{
-      content.hidden = false;
-      btn.setAttribute("aria-expanded", "true");
-    }}
-  }}
-
-  function showDefaultState() {{
-    const adviceEl = document.getElementById('advice');
-    const fruitImg = document.getElementById('fruitImage');
-    const resultEl = document.getElementById('result');
-    const percentEl = document.getElementById('percentDisplay');
-    
-    resultEl.textContent = '';
-    percentEl.innerHTML = '<small>สารตกค้าง</small> --%';
-    percentEl.style.color = '#666';
-    adviceEl.innerHTML = '<span style="font-size: 1.5em; color: #666;">รอข้อมูล...</span>';
-    fruitImg.src = "guava.jpg";
-    fruitImg.alt = 'รูปฝรั่ง';
-  }}
-
-  {call_show_prediction_js}
-</script>
+    {call_show_prediction_js}
+  </script>
 </body>
 </html>
 """
 
-st.components.v1.html(html_code, height=0, scrolling=False)
+st.components.v1.html(html_code, height=700, scrolling=False)
