@@ -48,7 +48,7 @@ if len(row_data) >= 10:
         predicted_percent = int(prob_safe * 100)
 
         # ลบแถวแรกหลังประมวลผล (ไม่ลบถ้ามี error)
-        sheet.delete_rows(1)
+        sheet.delete_rows(2)
 
     except Exception as e:
         st.error(f"Prediction error: {e}")
@@ -183,6 +183,7 @@ html_code = f"""
 
 # ฝัง HTML ลงใน Streamlit โดยไม่ให้เลื่อนหน้าจอ (scrolling=False)
 st.components.v1.html(html_code, height=700, scrolling=False)
+
 
 
 
