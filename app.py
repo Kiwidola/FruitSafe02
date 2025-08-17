@@ -6,7 +6,7 @@ from streamlit_autorefresh import st_autorefresh
 import base64
 
 # ตรวจสอบการอัปเดตข้อมูลทุก 2 วินาที
-st_autorefresh(interval=10_000, key="refresh")
+st_autorefresh(interval=2_000, key="refresh")
 
 # โหลดโมเดล
 model = joblib.load('Model.pkl')
@@ -75,18 +75,16 @@ if st.session_state.has_new_data and len(row_data) >= 10:
 
 # เรียก JS ฟังก์ชันเมื่อมีผลลัพธ์ หรือแสดงสถานะเริ่มต้น
 if st.session_state.has_new_data and len(row_data) >= 10:
+    # มีข้อมูลใหม่ - แสดงผลลัพธ์ใหม่
     call_show_prediction_js = f"showPrediction({predicted_percent});"
-elif len(row_data) >= 10:
-    # แสดงผลลัพธ์ล่าสุดถ้ามีข้อมูลแต่ไม่ใช่ข้อมูลใหม่
-    if 'last_prediction' not in st.session_state:
-        st.session_state.last_prediction = 0
+    # บันทึกผลลัพธ์ล่าสุด
+    st.session_state.last_prediction = predicted_percent
+elif 'last_prediction' in st.session_state and st.session_state.last_prediction > 0:
+    # แสดงผลลัพธ์ล่าสุดที่ยังคงอยู่
     call_show_prediction_js = f"showPrediction({st.session_state.last_prediction});"
 else:
+    # ไม่มีข้อมูลและไม่มีผลลัพธ์ล่าสุด - แสดงสถานะรอ
     call_show_prediction_js = "showDefaultState();"
-
-# บันทึกผลลัพธ์ล่าสุด
-if predicted_percent > 0:
-    st.session_state.last_prediction = predicted_percent
 
 # ซ่อน Header / Footer / Menu ของ Streamlit
 st.markdown("""
@@ -230,4 +228,3 @@ html_code = f"""
 """
 
 st.components.v1.html(html_code, height=700, scrolling=False)
-
