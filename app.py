@@ -4,21 +4,12 @@ import streamlit as st
 import joblib
 from streamlit_autorefresh import st_autorefresh
 import base64
-import os
-
-# Disable file watching to avoid inotify issues
-os.environ['STREAMLIT_SERVER_FILE_WATCHER_TYPE'] = 'none'
 
 # รีเฟรชทุก 10 วินาที (10000 ms)
 st_autorefresh(interval=10_000, key="refresh")
 
 # โหลดโมเดล
-try:
-    model = joblib.load('Model.pkl')
-except Exception as e:
-    st.error(f"Error loading model: {e}")
-    st.info("This might be due to scikit-learn version mismatch. Please retrain the model with the current version.")
-    st.stop()
+model = joblib.load('Model.pkl')
 
 # กำหนด scope และโหลดข้อมูล service account จาก secrets ของ Streamlit Cloud
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -26,12 +17,8 @@ credentials_info = st.secrets["gcp_service_account"]
 creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 
 # เชื่อมต่อ Google Sheet
-try:
-    client = gspread.authorize(creds)
-    sheet = client.open("FruitSafe01").sheet1
-except Exception as e:
-    st.error(f"Error connecting to Google Sheets: {e}")
-    st.stop()
+client = gspread.authorize(creds)
+sheet = client.open("FruitSafe01").sheet1
 
 # ดึงข้อมูลแถวที่ 2 จาก Sheet
 try:
@@ -64,11 +51,8 @@ if len(row_data) >= 10:
     except Exception as e:
         st.error(f"Prediction error: {e}")
 
-# เรียก JS ฟังก์ชันเมื่อมีผลลัพธ์ หรือแสดงสถานะเริ่มต้น
-if predicted_percent > 0:
-    call_show_prediction_js = f"showPrediction({predicted_percent});"
-else:
-    call_show_prediction_js = "showDefaultState();"
+# เรียก JS ฟังก์ชันเมื่อมีผลลัพธ์
+call_show_prediction_js = f"showPrediction({predicted_percent});" if predicted_percent > 0 else ""
 
 # ซ่อน Header / Footer / Menu ของ Streamlit
 st.markdown("""
@@ -166,48 +150,38 @@ html_code = f"""
   <div id="advice" class="advice"></div>
   <div id="confidence" class="confidence"></div>
 
-     <script>
-     function showPrediction(value) {{
-       console.log('Showing prediction with value:', value);
-       const adviceEl = document.getElementById('advice');
-       const confEl = document.getElementById('confidence');
+  <script>
+    function showPrediction(value) {{
+      const adviceEl = document.getElementById('advice');
+      const confEl = document.getElementById('confidence');
 
-       let advice = '';
-       let imgSrc = '';
-       let imgAlt = '';
+      let advice = '';
+      let imgSrc = '';
+      let imgAlt = '';
 
-       if (value <= 20) {{
-         advice = '<span style="font-size: 1.6em; color: green;">ปลอดภัย</span>';
-         imgSrc = "data:image/png;base64,{img1_b64}";
-         imgAlt = 'รูปปลอดภัย';
-       }} else if (value <= 40) {{
-         advice = '<span style="font-size: 1.6em; color: #e67e22;">เสี่ยงปานกลาง</span><br>' +
-                  '<span style="font-size: 1.1em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
-         imgSrc = "data:image/png;base64,{img3_b64}";
-         imgAlt = 'รูปเสี่ยงปานกลาง';
-       }} else {{
-         advice = '<span style="font-size: 1.6em; color: red;">เสี่ยงสูง!</span><br>' +
-                  '<span style="font-size: 1.1em;">ควรล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span>';
-         imgSrc = "data:image/png;base64,{img0_b64}";
-         imgAlt = 'รูปเสี่ยงสูง';
-       }}
+      if (value <= 20) {{
+        advice = '<span style="font-size: 1.6em; color: green;">ปลอดภัย</span>';
+        imgSrc = "data:image/png;base64,{img1_b64}";
+        imgAlt = 'รูปปลอดภัย';
+      }} else if (value <= 40) {{
+        advice = '<span style="font-size: 1.6em; color: #e67e22;">เสี่ยงปานกลาง</span><br>' +
+                 '<span style="font-size: 1.1em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
+        imgSrc = "data:image/png;base64,{img3_b64}";
+        imgAlt = 'รูปเสี่ยงปานกลาง';
+      }} else {{
+        advice = '<span style="font-size: 1.6em; color: red;">เสี่ยงสูง!</span><br>' +
+                 '<span style="font-size: 1.1em;">ควรล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span>';
+        imgSrc = "data:image/png;base64,{img0_b64}";
+        imgAlt = 'รูปเสี่ยงสูง';
+      }}
 
-       advice += `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
+      advice += `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
 
-       adviceEl.innerHTML = advice;
-       confEl.innerHTML = `Confidence: ${{value}}%`;
-     }}
+      adviceEl.innerHTML = advice;
+      confEl.innerHTML = `Confidence: ${{value}}%`;
+    }}
 
-     function showDefaultState() {{
-       const adviceEl = document.getElementById('advice');
-       const confEl = document.getElementById('confidence');
-       
-       adviceEl.innerHTML = '<span style="font-size: 1.4em; color: #666;">รอข้อมูล...</span>';
-       confEl.innerHTML = '';
-       console.log('Default state shown');
-     }}
-
-     {call_show_prediction_js}
+    {call_show_prediction_js}
   </script>
 </body>
 </html>
