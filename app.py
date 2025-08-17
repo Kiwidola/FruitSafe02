@@ -6,7 +6,7 @@ from streamlit_autorefresh import st_autorefresh
 import base64
 
 # ตรวจสอบการอัปเดตข้อมูลทุก 2 วินาที
-st_autorefresh(interval=2_000, key="refresh")
+st_autorefresh(interval=10_000, key="refresh")
 
 # โหลดโมเดล
 model = joblib.load('Model.pkl')
@@ -230,3 +230,4 @@ html_code = f"""
 """
 
 st.components.v1.html(html_code, height=700, scrolling=False)
+
