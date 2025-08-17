@@ -18,7 +18,7 @@ creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 
 # เชื่อมต่อ Google Sheet
 client = gspread.authorize(creds)
-sheet = client.open("FruitSafe").sheet1
+sheet = client.open("FruitSafe01").sheet1
 
 # ดึงข้อมูลแถวที่ 1 จาก Sheet
 try:
@@ -183,6 +183,7 @@ html_code = f"""
 
 # ฝัง HTML ลงใน Streamlit โดยไม่ให้เลื่อนหน้าจอ (scrolling=False)
 st.components.v1.html(html_code, height=700, scrolling=False)
+
 
 
 
