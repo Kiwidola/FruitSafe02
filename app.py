@@ -73,6 +73,17 @@ st.markdown("""
     footer {visibility: hidden;}
     [data-testid="stAppViewContainer"] {
         background-color: #fefae0;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    [data-testid="stAppViewBlockContainer"] {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .main .block-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: none !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -90,7 +101,6 @@ html_code = f"""
   :root{{
     --cream: #fef8e5;
     --green: #2f8b3e;   
-    --card-w: 320px;
   }}
 
   body{{
