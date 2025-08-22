@@ -85,6 +85,13 @@ st.markdown("""
         margin: 0 !important;
         max-width: none !important;
     }
+    .stApp {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .stApp > header {
+        display: none !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -126,7 +133,7 @@ html_code = f"""
       color: #2e7d32;
       text-align: center;
       margin-bottom: 15px;
-      margin-top: 0;
+      margin-top: -20px;
     }}
 
     .results-label {{
