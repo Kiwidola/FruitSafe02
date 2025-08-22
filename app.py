@@ -107,39 +107,39 @@ html_code = f"""
     width: clamp(260px, 90vw, var(--card-w));
     background: linear-gradient(#fff0, rgba(0,0,0,0));
     border-radius:14px;
-    padding:12px 18px;
+    padding:8px 16px;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:12px;
-    max-height: 80vh;
+    gap:8px;
+    max-height: 85vh;
     overflow-y: auto;
   }}
 
   .results-label {{
     color: #e67e22;
-    font-size: 18px;
-    margin-top: -48px;
-    margin-bottom: 10px;
+    font-size: 15px;
+    margin-top: 0;
+    margin-bottom: 6px;
     border-top: 2px solid #c5e1a5;
     border-bottom: 2px solid #c5e1a5;
-    padding: 5px 20px;
+    padding: 3px 12px;
     text-align: center;
   }}
 
   .results-value {{
-    font-size: 32px;
+    font-size: 20px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     transition: color 0.3s;
     text-align: center;
   }}
 
   .logo img {{
-    max-width: 190px;
+    max-width: 100px;
     height: auto;
     display: block;
-    margin: 0 auto 20px;
+    margin: 0 auto 6px;
   }}
 
   .result{{
@@ -147,8 +147,8 @@ html_code = f"""
   }}
 
   .image-wrap{{
-    width: 85%;
-    max-width:220px;
+    width: 60%;
+    max-width:140px;
     aspect-ratio: 1.8/1;
     position:relative;
     display:flex;
@@ -171,11 +171,11 @@ html_code = f"""
     display:flex;
     flex-direction: column;
     align-items:center;
-    gap: 12px;
+    gap: 8px;
   }}
 
   .percent {{
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 700;
     text-align: center;
     display: flex;
@@ -191,8 +191,8 @@ html_code = f"""
 
   .btn{{
     width:85%;
-    max-width:240px;
-    padding:12px;
+    max-width:220px;
+    padding:10px;
     border-radius:10px;
     border:2px solid #2e7d32;
     background: #fffdf7;
@@ -201,16 +201,16 @@ html_code = f"""
     cursor:pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     font-family: 'Rubik', sans-serif;
-    font-size: 1em;
+    font-size: 0.9em;
   }}
 
   .button-group {{
     width: 85%;
-    max-width: 240px;
+    max-width: 220px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     justify-content: center;
   }}
 
@@ -240,10 +240,16 @@ html_code = f"""
   }}
 
   .toggle-content {{
-    margin-top: 10px;
-    font-size: 0.95em;
+    margin-top: 8px;
+    font-size: 0.9em;
     line-height: 1.4;
     color: #333;
+  }}
+
+  .toggle-content img {{
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
   }}
 
   .sub {{
@@ -270,7 +276,7 @@ html_code = f"""
     </div>
 
     <div class="image-wrap" aria-hidden="true">
-      <img id="fruitImage" src="guava.jpg" alt="รูปฝรั่ง" class="fruit">
+      <img id="fruitImage" src="data:image/png;base64,{img1_b64}" alt="รูปฝรั่ง" class="fruit">
     </div>
 
     <div class="meta">
