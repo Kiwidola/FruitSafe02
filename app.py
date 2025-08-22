@@ -120,9 +120,12 @@ html_code = f"""
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:space-between;
-    padding: 40px 20px;
+    justify-content:flex-start;
+    padding: 20px;
     box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
   }}
 
   .results-label {{
@@ -145,14 +148,19 @@ html_code = f"""
   }}
 
   .logo img {{
-    max-width: 120px;
+    max-width: 100px;
     height: auto;
     display: block;
-    margin: 0 auto 10px;
+    margin: 0 auto 20px;
   }}
 
   .result{{
     text-align:center;
+    margin: 20px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }}
 
   .image-wrap{{
@@ -180,8 +188,8 @@ html_code = f"""
     display:flex;
     flex-direction: column;
     align-items:center;
-    gap: 6px;
-    margin-top: auto;
+    gap: 10px;
+    margin-top: 20px;
   }}
 
   .percent {{
