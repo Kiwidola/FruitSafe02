@@ -120,20 +120,19 @@ html_code = f"""
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
-    gap:12px;
-    padding: 20px;
+    justify-content:space-between;
+    padding: 40px 20px;
     box-sizing: border-box;
   }}
 
   .results-label {{
     color: #e67e22;
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 0;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     border-top: 2px solid #c5e1a5;
     border-bottom: 2px solid #c5e1a5;
-    padding: 5px 20px;
+    padding: 4px 16px;
     text-align: center;
   }}
 
@@ -146,10 +145,10 @@ html_code = f"""
   }}
 
   .logo img {{
-    max-width: 150px;
+    max-width: 120px;
     height: auto;
     display: block;
-    margin: 0 auto 15px;
+    margin: 0 auto 10px;
   }}
 
   .result{{
@@ -181,7 +180,8 @@ html_code = f"""
     display:flex;
     flex-direction: column;
     align-items:center;
-    gap: 8px;
+    gap: 6px;
+    margin-top: auto;
   }}
 
   .percent {{
@@ -294,7 +294,7 @@ html_code = f"""
       </div>
     </div>
 
-    <div class="toggle-section" style="margin-top:-2px;">
+    <div class="toggle-section" style="margin-top: 10px;">
       <button class="toggle-btn" aria-expanded="false" aria-controls="info1" onclick="toggleInfo('info1', this)">
          <span style="border-bottom: 2px solid #2f8b3e;">สารเคมีผลกระทบคืออะไร</span>
         <span class="arrow">▼</span>
