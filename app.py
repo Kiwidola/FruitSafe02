@@ -359,7 +359,8 @@ html_code = f"""
 </html>
 """
 
-st.components.v1.html(html_code, height=500, scrolling=False)
+st.components.v1.html(html_code, height=800, scrolling=False)
+
 
 
 
