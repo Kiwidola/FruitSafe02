@@ -62,8 +62,8 @@ elif 'last_prediction' in st.session_state and st.session_state.last_prediction 
     # ไม่มีข้อมูลใหม่ แต่มีผลลัพธ์ล่าสุด - แสดงผลลัพธ์ล่าสุด
     call_show_prediction_js = f"showPrediction({st.session_state.last_prediction});"
 else:
-    # ไม่มีข้อมูลและไม่มีผลลัพธ์ล่าสุด - แสดงผลลัพธ์ตัวอย่าง
-    call_show_prediction_js = "showPrediction(80);"
+    # ไม่มีข้อมูลและไม่มีผลลัพธ์ล่าสุด - แสดงสถานะรอ
+    call_show_prediction_js = "showDefaultState();"
 
 # ซ่อน Header / Footer / Menu ของ Streamlit
 st.markdown("""
