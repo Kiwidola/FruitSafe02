@@ -62,8 +62,8 @@ elif 'last_prediction' in st.session_state and st.session_state.last_prediction 
     # ไม่มีข้อมูลใหม่ แต่มีผลลัพธ์ล่าสุด - แสดงผลลัพธ์ล่าสุด
     call_show_prediction_js = f"showPrediction({st.session_state.last_prediction});"
 else:
-    # ไม่มีข้อมูลและไม่มีผลลัพธ์ล่าสุด - แสดงสถานะรอ
-    call_show_prediction_js = "showDefaultState();"
+    # ไม่มีข้อมูลและไม่มีผลลัพธ์ล่าสุด - แสดงผลลัพธ์ตัวอย่าง
+    call_show_prediction_js = "showPrediction(80);"
 
 # ซ่อน Header / Footer / Menu ของ Streamlit
 st.markdown("""
@@ -95,35 +95,35 @@ html_code = f"""
 
   body{{
     margin:0;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    padding:0;
+    height:100vh;
+    width:100vw;
+    overflow:hidden;
     background:var(--cream);
     font-family: 'Rubik', 'Merriweather', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }}
 
   .card{{
-    width: clamp(260px, 90vw, var(--card-w));
-    background: linear-gradient(#fff0, rgba(0,0,0,0));
-    border-radius:14px;
-    padding:8px 16px;
+    width: 100vw;
+    height: 100vh;
+    background: var(--cream);
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:8px;
-    max-height: 85vh;
-    overflow-y: auto;
+    justify-content:center;
+    gap:12px;
+    padding: 20px;
+    box-sizing: border-box;
   }}
 
   .results-label {{
     color: #e67e22;
-    font-size: 15px;
+    font-size: 18px;
     margin-top: 0;
-    margin-bottom: 6px;
+    margin-bottom: 15px;
     border-top: 2px solid #c5e1a5;
     border-bottom: 2px solid #c5e1a5;
-    padding: 3px 12px;
+    padding: 5px 20px;
     text-align: center;
   }}
 
@@ -136,10 +136,10 @@ html_code = f"""
   }}
 
   .logo img {{
-    max-width: 100px;
+    max-width: 150px;
     height: auto;
     display: block;
-    margin: 0 auto 6px;
+    margin: 0 auto 15px;
   }}
 
   .result{{
@@ -147,8 +147,8 @@ html_code = f"""
   }}
 
   .image-wrap{{
-    width: 60%;
-    max-width:140px;
+    width: 80%;
+    max-width:250px;
     aspect-ratio: 1.8/1;
     position:relative;
     display:flex;
@@ -275,9 +275,7 @@ html_code = f"""
       <div id="advice" class="sub">-</div>
     </div>
 
-    <div class="image-wrap" aria-hidden="true">
-      <img id="fruitImage" src="data:image/png;base64,{img1_b64}" alt="รูปฝรั่ง" class="fruit">
-    </div>
+
 
     <div class="meta">
       <div class="percent" id="percentDisplay"><small>สารตกค้าง</small> --%</div>
