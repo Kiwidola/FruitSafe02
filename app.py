@@ -133,7 +133,7 @@ html_code = f"""
       color: #2e7d32;
       text-align: center;
       margin-bottom: 15px;
-      margin-top: -20px;
+      margin-top: 0px;
     }}
 
     .results-label {{
@@ -368,6 +368,7 @@ html_code = f"""
 """
 
 st.components.v1.html(html_code, height=800, scrolling=False)
+
 
 
 
