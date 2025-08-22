@@ -113,7 +113,7 @@ html_code = f"""
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 5px 10px;
+      padding: 0 10px;
       height: 100vh;
       box-sizing: border-box;
       user-select: none;
@@ -125,7 +125,8 @@ html_code = f"""
       font-size: 36px;
       color: #2e7d32;
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 15px;
+      margin-top: 0;
     }}
 
     .results-label {{
@@ -359,7 +360,7 @@ html_code = f"""
 </html>
 """
 
-st.components.v1.html(html_code, height=800, scrolling=False)
+st.components.v1.html(html_code, height=1000, scrolling=False)
 
 
 
