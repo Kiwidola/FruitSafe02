@@ -104,14 +104,16 @@ html_code = f"""
   }}
 
   .card{{
-    width: clamp(260px, 38vw, var(--card-w));
+    width: clamp(260px, 90vw, var(--card-w));
     background: linear-gradient(#fff0, rgba(0,0,0,0));
     border-radius:14px;
-    padding:22px 18px;
+    padding:12px 18px;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:14px;
+    gap:12px;
+    max-height: 80vh;
+    overflow-y: auto;
   }}
 
   .results-label {{
@@ -284,7 +286,7 @@ html_code = f"""
         <span class="arrow">▼</span>
       </button>
       <div id="info1" class="toggle-content" hidden>
-        <img src="data:image/png;base64,{poster_b64}" alt="โปสเตอร์สารเคมี organophosphate และ Carbamate" style="max-width:100%; height:auto;">
+        <img src="data:image/jpeg;base64,{poster_b64}" alt="โปสเตอร์สารเคมี organophosphate และ Carbamate" style="max-width:100%; height:auto;">
       </div>
     </div>
   </div>
