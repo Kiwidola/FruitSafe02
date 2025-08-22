@@ -154,13 +154,108 @@ html_code = f"""
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }}
 
-    .confidence {{
-      position: absolute;
-      bottom: 10px;
-      right: 12px;
-      font-size: 12px;
-      color: #666;
-      font-style: italic;
+    .results-value {{
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      transition: color 0.3s;
+      text-align: center;
+    }}
+
+    .result {{
+      text-align: center;
+      margin: 20px 0;
+    }}
+
+    .meta {{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }}
+
+    .percent {{
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }}
+
+    .percent small {{
+      font-size: 14px;
+      color: #000000;
+      font-weight: 500;
+    }}
+
+    .btn {{
+      width: 85%;
+      max-width: 220px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 2px solid #2e7d32;
+      background: #fffdf7;
+      text-align: center;
+      font-weight: 560;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      font-family: 'Rubik', sans-serif;
+      font-size: 0.9em;
+    }}
+
+    .button-group {{
+      width: 85%;
+      max-width: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+    }}
+
+    .toggle-btn {{
+      width: 100%;
+      background: none;
+      border: none;
+      font-size: 0.9em;
+      font-weight: 565;
+      color: #2f8b3e;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0;
+    }}
+
+    .arrow {{
+      display: inline-block;
+      transition: transform 0.3s ease;
+      font-weight: 700;
+      font-size: 1.2em;
+    }}
+
+    .toggle-btn[aria-expanded="true"] .arrow {{
+      transform: rotate(180deg);
+    }}
+
+    .toggle-content {{
+      margin-top: 8px;
+      font-size: 0.9em;
+      line-height: 1.4;
+      color: #333;
+    }}
+
+    .toggle-content img {{
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }}
+
+    .toggle-section {{
+      margin-top: 15px;
     }}
   </style>
 </head>
@@ -169,49 +264,96 @@ html_code = f"""
   <div class="logo">Fruit<br>Safe</div>
 
   <div class="results-label">ผลการตรวจ</div>
-  <div id="advice" class="advice"></div>
-  <div id="confidence" class="confidence"></div>
+  
+  <div class="result" role="status" aria-live="polite">
+    <div id="result" class="results-value"></div>
+    <div id="advice" class="advice"></div>
+  </div>
+
+  <div class="meta">
+    <div class="percent" id="percentDisplay"><small>สารตกค้าง</small> --%</div>
+    <div class="button-group">
+      <button class="btn" onclick="openLink()">วิธีการล้างฝรั่ง</button>
+    </div>
+  </div>
+
+  <div class="toggle-section">
+    <button class="toggle-btn" aria-expanded="false" aria-controls="info1" onclick="toggleInfo('info1', this)">
+       <span style="border-bottom: 2px solid #2f8b3e;">สารเคมีผลกระทบคืออะไร</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div id="info1" class="toggle-content" hidden>
+      <img src="data:image/jpeg;base64,{poster_b64}" alt="โปสเตอร์สารเคมี organophosphate และ Carbamate" style="max-width:100%; height:auto;">
+    </div>
+  </div>
 
   <script>
     function showPrediction(value) {{
       const adviceEl = document.getElementById('advice');
-      const confEl = document.getElementById('confidence');
+      const resultEl = document.getElementById('result');
+      const percentEl = document.getElementById('percentDisplay');
 
+      let color = '';
       let advice = '';
       let imgSrc = '';
       let imgAlt = '';
 
       if (value <= 20) {{
-        advice = '<span style="font-size: 1.6em; color: green;">ปลอดภัย</span>';
+        color = 'green';
+        advice = '<span style="font-size: 2em; color: green;">เสี่ยงต่ำ ปลอดภัย</span>';
         imgSrc = "data:image/png;base64,{img1_b64}";
-        imgAlt = 'รูปปลอดภัย';
+        imgAlt = 'รูปความเสี่ยงต่ำ';
       }} else if (value <= 40) {{
-        advice = '<span style="font-size: 1.6em; color: #e67e22;">เสี่ยงปานกลาง</span><br>' +
-                 '<span style="font-size: 1.1em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
+        color = '#e67e22';
+        advice = '<span style="font-size: 2em; color: #e67e22;">เสี่ยงปานกลาง</span><br> ' +
+                 '<span style="font-size: 1.3em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
         imgSrc = "data:image/png;base64,{img3_b64}";
-        imgAlt = 'รูปเสี่ยงปานกลาง';
+        imgAlt = 'รูปความเสี่ยงปานกลาง';
       }} else {{
-        advice = '<span style="font-size: 1.6em; color: red;">เสี่ยงสูง!</span><br>' +
-                 '<span style="font-size: 1.1em;">ควรล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span>';
+        color = 'red';
+        advice = '<span style="font-size: 2em; color: red;">เสี่ยงสูง!</span><br>' +
+                 '<span style="font-size: 1.3em;">ต้องล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span><br>';
         imgSrc = "data:image/png;base64,{img0_b64}";
-        imgAlt = 'รูปเสี่ยงสูง';
+        imgAlt = 'รูปความเสี่ยงสูง';
       }}
 
-      advice += `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
+      resultEl.textContent = '';
+      percentEl.innerHTML = '<small>สารตกค้าง</small> ' + value + '%';
+      percentEl.style.color = color;
+      adviceEl.innerHTML = advice + `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
+    }}
 
-             adviceEl.innerHTML = advice;
-       confEl.innerHTML = `Confidence: ${{value}}%`;
-     }}
+    function showDefaultState() {{
+      const adviceEl = document.getElementById('advice');
+      const resultEl = document.getElementById('result');
+      const percentEl = document.getElementById('percentDisplay');
+      
+      resultEl.textContent = '';
+      percentEl.innerHTML = '<small>สารตกค้าง</small> --%';
+      percentEl.style.color = '#666';
+      adviceEl.innerHTML = '<span style="font-size: 1.4em; color: #666;">รอข้อมูล...</span>';
+    }}
 
-     function showDefaultState() {{
-       const adviceEl = document.getElementById('advice');
-       const confEl = document.getElementById('confidence');
-       
-       adviceEl.innerHTML = '<span style="font-size: 1.4em; color: #666;">รอข้อมูล...</span>';
-       confEl.innerHTML = '';
-     }}
+    function openLink() {{
+      const url = prompt('วิธีการล้างฝรั่ง:', 'https://youtube.com/shorts/H2OW4IHmfYM?feature=share/');
+      if (url) {{
+        window.location.href = url;
+      }}
+    }}
 
-     {call_show_prediction_js}
+    function toggleInfo(id, btn) {{
+      const content = document.getElementById(id);
+      const expanded = btn.getAttribute("aria-expanded") === "true";
+      if (expanded) {{
+        content.hidden = true;
+        btn.setAttribute("aria-expanded", "false");
+      }} else {{
+        content.hidden = false;
+        btn.setAttribute("aria-expanded", "true");
+      }}
+    }}
+
+    {call_show_prediction_js}
   </script>
 </body>
 </html>
