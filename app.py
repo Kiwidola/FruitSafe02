@@ -112,8 +112,8 @@ html_code = f"""
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 10px;
+      justify-content: flex-start;
+      padding: 20px 10px;
       height: 100vh;
       box-sizing: border-box;
       user-select: none;
@@ -359,8 +359,7 @@ html_code = f"""
 </html>
 """
 
-st.components.v1.html(html_code, height=1000, scrolling=False)
-
+st.components.v1.html(html_code, height=800, scrolling=False)
 
 
 
