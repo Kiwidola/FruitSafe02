@@ -343,10 +343,7 @@ html_code = f"""
     }}
 
     function openLink() {{
-      const url = prompt('วิธีการล้างฝรั่ง:', 'https://youtube.com/shorts/H2OW4IHmfYM?feature=share/');
-      if (url) {{
-        window.location.href = url;
-      }}
+      window.open('https://youtube.com/shorts/H2OW4IHmfYM?feature=share/', '_blank');
     }}
 
     function toggleInfo(id, btn) {{
@@ -368,7 +365,6 @@ html_code = f"""
 """
 
 st.components.v1.html(html_code, height=1200, scrolling=False)
-
 
 
 
