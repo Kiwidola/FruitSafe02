@@ -113,7 +113,7 @@ html_code = f"""
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 20px 10px;
+      padding: 5px 10px;
       height: 100vh;
       box-sizing: border-box;
       user-select: none;
