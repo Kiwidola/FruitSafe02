@@ -122,28 +122,28 @@ html_code = f"""
 
     .logo {{
       font-family: 'Merriweather', serif;
-      font-size: 28px;
+      font-size: 36px;
       color: #2e7d32;
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 25px;
     }}
 
     .results-label {{
       color: #e67e22;
-      font-size: 18px;
-      margin-bottom: 8px;
+      font-size: 22px;
+      margin-bottom: 15px;
       border-top: 2px solid #c5e1a5;
       border-bottom: 2px solid #c5e1a5;
-      padding: 4px 12px;
+      padding: 6px 16px;
     }}
 
     .advice {{
-      font-size: 14px;
+      font-size: 16px;
       color: #333;
       text-align: center;
       max-width: 90vw;
-      margin-top: 10px;
-      min-height: 140px;
+      margin-top: 15px;
+      min-height: 180px;
     }}
 
     .advice img {{
@@ -155,16 +155,16 @@ html_code = f"""
     }}
 
     .results-value {{
-      font-size: 20px;
+      font-size: 24px;
       font-weight: bold;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       transition: color 0.3s;
       text-align: center;
     }}
 
     .result {{
       text-align: center;
-      margin: 20px 0;
+      margin: 30px 0;
     }}
 
     .meta {{
@@ -172,30 +172,30 @@ html_code = f"""
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
-      margin-top: 20px;
+      gap: 15px;
+      margin-top: 30px;
     }}
 
     .percent {{
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 700;
       text-align: center;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }}
 
     .percent small {{
-      font-size: 14px;
+      font-size: 16px;
       color: #000000;
       font-weight: 500;
     }}
 
     .btn {{
       width: 85%;
-      max-width: 220px;
-      padding: 10px;
-      border-radius: 10px;
+      max-width: 280px;
+      padding: 15px;
+      border-radius: 12px;
       border: 2px solid #2e7d32;
       background: #fffdf7;
       text-align: center;
@@ -203,16 +203,16 @@ html_code = f"""
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       font-family: 'Rubik', sans-serif;
-      font-size: 0.9em;
+      font-size: 1.1em;
     }}
 
     .button-group {{
       width: 85%;
-      max-width: 220px;
+      max-width: 280px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       justify-content: center;
     }}
 
@@ -220,7 +220,7 @@ html_code = f"""
       width: 100%;
       background: none;
       border: none;
-      font-size: 0.9em;
+      font-size: 1.1em;
       font-weight: 565;
       color: #2f8b3e;
       cursor: pointer;
@@ -242,8 +242,8 @@ html_code = f"""
     }}
 
     .toggle-content {{
-      margin-top: 8px;
-      font-size: 0.9em;
+      margin-top: 12px;
+      font-size: 1em;
       line-height: 1.4;
       color: #333;
     }}
@@ -251,11 +251,11 @@ html_code = f"""
     .toggle-content img {{
       max-width: 100%;
       height: auto;
-      border-radius: 8px;
+      border-radius: 10px;
     }}
 
     .toggle-section {{
-      margin-top: 15px;
+      margin-top: 25px;
     }}
   </style>
 </head>
@@ -360,7 +360,6 @@ html_code = f"""
 """
 
 st.components.v1.html(html_code, height=800, scrolling=False)
-
 
 
 
