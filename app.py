@@ -282,7 +282,7 @@ body {{
   <div class="percent" id="percentDisplay"><small>สารตกค้าง</small> --%</div>
   <div class="button-group">
     <button class="btn" onclick="openLink()">วิธีล้างฝรั่ง</button>
-    <button class="btn" onclick="openModal()">ดูโปสเตอร์สารเคมี</button>
+    <button class="btn" onclick="openModal()">ผลกระทบของสารเคมี</button>
   </div>
 </div>
 
@@ -364,5 +364,6 @@ function openLink() {{
 """
 
 st.components.v1.html(html_code, height=850, scrolling=True)
+
 
 
