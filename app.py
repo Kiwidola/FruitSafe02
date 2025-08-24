@@ -332,7 +332,7 @@ function showPrediction(value) {{
   }}
 
   resultEl.textContent = '';
-  percentEl.innerHTML = '<small>สารตกค้าง</small> ' + value + '%';
+  percentEl.innerHTML = '<small>โอกาสสารตกค้างสูงกว่าค่ามาตรฐาน</small> ' + value + '%';
   percentEl.style.color = color;
   adviceEl.innerHTML = advice + `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
 }}
@@ -370,6 +370,7 @@ function openLink() {{
 """
 
 st.components.v1.html(html_code, height=800, scrolling=True)
+
 
 
 
