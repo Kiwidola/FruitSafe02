@@ -41,26 +41,32 @@ poster_b64 = img_to_base64_str("Poster.jpg")
 
 predicted_percent = 0  # ค่าเริ่มต้น
 
+# Check if there is a new row
 if len(row_data) >= 10:
     try:
         input_data = [float(x) for x in row_data[:10]]
         prob_safe = model.predict_proba([input_data])[0][1]
         predicted_percent = int(prob_safe * 100)
 
-        # ลบแถวที่ 1 หลังประมวลผล
+        # Update session state ONLY when new row exists
+        st.session_state.last_prediction = predicted_percent
+
+        # Delete processed row
         sheet.delete_rows(2)
+
+        # Call JS to update result
+        call_show_prediction_js = f"showPrediction({predicted_percent});"
 
     except Exception as e:
         st.error(f"Prediction error: {e}")
 
-# เรียก JS ฟังก์ชันเมื่อมีผลลัพธ์ หรือแสดงสถานะเริ่มต้น
-if len(row_data) >= 10:
-    call_show_prediction_js = f"showPrediction({predicted_percent});"
-    st.session_state.last_prediction = predicted_percent
-elif 'last_prediction' in st.session_state and st.session_state.last_prediction > 0:
-    call_show_prediction_js = f"showPrediction({st.session_state.last_prediction});"
 else:
-    call_show_prediction_js = "showDefaultState();"
+    # If no new row, keep the last prediction displayed
+    if 'last_prediction' in st.session_state:
+        call_show_prediction_js = f"showPrediction({st.session_state.last_prediction});"
+    else:
+        call_show_prediction_js = "showDefaultState();"
+
 
 # 🔹 ซ่อน Header / Footer / Menu ของ Streamlit และลบ container padding
 st.markdown("""
@@ -364,6 +370,7 @@ function openLink() {{
 """
 
 st.components.v1.html(html_code, height=650, scrolling=True)
+
 
 
 
