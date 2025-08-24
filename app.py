@@ -97,279 +97,265 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 🔹 HTML ฝังผลลัพธ์
+# HTML with modal for poster
 html_code = f"""
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>FruitSafe</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&family=Merriweather:wght@700&display=swap');
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FruitSafe</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&family=Merriweather:wght@700&display=swap');
 
-    html, body {{
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-    }}
+html, body {{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+}}
 
-    body {{
-      font-family: 'Rubik', sans-serif;
-      background-color: #fefae0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 0 10px;
-      height: 100vh;
-      box-sizing: border-box;
-      user-select: none;
-      position: relative;
-    }}
+body {{
+  font-family: 'Rubik', sans-serif;
+  background-color: #fefae0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 10px;
+  box-sizing: border-box;
+  user-select: none;
+}}
 
-    .logo {{
-      text-align: center;
-      margin-bottom: 10px;
-      margin-top: 0px;  /* flush top */
-    }}
+.logo {{
+  text-align: center;
+  margin: 0;
+}}
+.logo img {{
+  max-width: 220px;
+  height: auto;
+}}
 
-    .logo img {{
-      max-width: 220px;
-      height: auto;
-    }}
+.results-label {{
+  color: #e67e22;
+  font-size: 22px;
+  margin-bottom: 10px;
+  border-top: 2px solid #c5e1a5;
+  border-bottom: 2px solid #c5e1a5;
+  padding: 6px 16px;
+}}
 
-    .results-label {{
-      color: #e67e22;
-      font-size: 22px;
-      margin-bottom: 10px;
-      border-top: 2px solid #c5e1a5;
-      border-bottom: 2px solid #c5e1a5;
-      padding: 6px 16px;
-    }}
+.result {{
+  text-align: center;
+  margin: 20px 0;
+}}
 
-    .advice {{
-      font-size: 16px;
-      color: #333;
-      text-align: center;
-      max-width: 90vw;
-      margin-top: 10px;
-      min-height: 120px;
-    }}
+.results-value {{
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  transition: color 0.3s;
+  text-align: center;
+}}
 
-    .advice img {{
-      margin-top: 10px;
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }}
+.advice {{
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+  max-width: 90vw;
+  margin-top: 10px;
+  min-height: 120px;
+}}
 
-    .results-value {{
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 8px;
-      transition: color 0.3s;
-      text-align: center;
-    }}
+.advice img {{
+  margin-top: 10px;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}}
 
-    .result {{
-      text-align: center;
-      margin: 20px 0;
-    }}
+.meta {{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}}
 
-    .meta {{
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      margin-top: 20px;
-    }}
+.percent {{
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}}
+.percent small {{
+  font-size: 16px;
+  color: #000;
+  font-weight: 500;
+}}
 
-    .percent {{
-      font-size: 22px;
-      font-weight: 700;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }}
+.btn {{
+  width: 85%;
+  max-width: 280px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px solid #2e7d32;
+  background: #fffdf7;
+  text-align: center;
+  font-weight: 560;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  font-family: 'Rubik', sans-serif;
+  font-size: 1em;
+}}
 
-    .percent small {{
-      font-size: 16px;
-      color: #000000;
-      font-weight: 500;
-    }}
+.button-group {{
+  width: 85%;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}}
 
-    .btn {{
-      width: 85%;
-      max-width: 280px;
-      padding: 12px;
-      border-radius: 12px;
-      border: 2px solid #2e7d32;
-      background: #fffdf7;
-      text-align: center;
-      font-weight: 560;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      font-family: 'Rubik', sans-serif;
-      font-size: 1em;
-    }}
+/* Modal styles */
+.modal {{
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}}
 
-    .button-group {{
-      width: 85%;
-      max-width: 280px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      justify-content: center;
-    }}
+.modal-content {{
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  text-align: center;
+}}
 
-    .toggle-btn {{
-      width: 100%;
-      background: none;
-      border: none;
-      font-size: 1.1em;
-      font-weight: 565;
-      color: #2f8b3e;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0;
-    }}
+.close-btn {{
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 8px;
+}}
 
-    .arrow {{
-      display: inline-block;
-      transition: transform 0.3s ease;
-      font-weight: 700;
-      font-size: 1.2em;
-    }}
-
-    .toggle-btn[aria-expanded="true"] .arrow {{
-      transform: rotate(180deg);
-    }}
-
-    .toggle-content {{
-      margin-top: 8px;
-      font-size: 1em;
-      line-height: 1.4;
-      color: #333;
-    }}
-
-    .toggle-content img {{
-      max-width: 100%;
-      height: auto;
-      border-radius: 10px;
-    }}
-
-    .toggle-section {{
-      margin-top: 10px;  /* bring poster higher */
-    }}
-  </style>
+.toggle-section {{
+  margin-top: 10px;
+}}
+</style>
 </head>
 <body>
 
-  <div class="logo">
-    <img src="data:image/jpeg;base64,{fruitsafe_b64}" alt="FruitSafe Logo" />
+<div class="logo">
+  <img src="data:image/jpeg;base64,{fruitsafe_b64}" alt="FruitSafe Logo" />
+</div>
+
+<div class="results-label">ผลการตรวจ</div>
+
+<div class="result" role="status" aria-live="polite">
+  <div id="result" class="results-value"></div>
+  <div id="advice" class="advice"></div>
+</div>
+
+<div class="meta">
+  <div class="percent" id="percentDisplay"><small>สารตกค้าง</small> --%</div>
+  <div class="button-group">
+    <button class="btn" onclick="openModal()">สารเคมีผลกระทบคืออะไร</button>
   </div>
+</div>
 
-  <div class="results-label">ผลการตรวจ</div>
-  
-  <div class="result" role="status" aria-live="polite">
-    <div id="result" class="results-value"></div>
-    <div id="advice" class="advice"></div>
+<!-- Modal popup -->
+<div id="posterModal" class="modal">
+  <div class="modal-content">
+    <img src="data:image/jpeg;base64,{poster_b64}" alt="Poster" style="max-width:100%; height:auto; border-radius:10px;">
+    <br>
+    <button class="close-btn" onclick="closeModal()">ปิด</button>
   </div>
+</div>
 
-  <div class="meta">
-    <div class="percent" id="percentDisplay"><small>สารตกค้าง</small> --%</div>
-    <div class="button-group">
-      <button class="btn" onclick="openLink()">วิธีการล้างฝรั่ง</button>
-    </div>
-  </div>
+<script>
+function showPrediction(value) {{
+  const adviceEl = document.getElementById('advice');
+  const resultEl = document.getElementById('result');
+  const percentEl = document.getElementById('percentDisplay');
 
-  <div class="toggle-section">
-    <button class="toggle-btn" aria-expanded="false" aria-controls="info1" onclick="toggleInfo('info1', this)">
-       <span style="border-bottom: 2px solid #2f8b3e;">สารเคมีผลกระทบคืออะไร</span>
-      <span class="arrow">▼</span>
-    </button>
-    <div id="info1" class="toggle-content" hidden>
-      <img src="data:image/jpeg;base64,{poster_b64}" alt="โปสเตอร์สารเคมี organophosphate และ Carbamate" style="max-width:100%; height:auto;">
-    </div>
-  </div>
+  let color = '';
+  let advice = '';
+  let imgSrc = '';
+  let imgAlt = '';
 
-  <script>
-    function showPrediction(value) {{
-      const adviceEl = document.getElementById('advice');
-      const resultEl = document.getElementById('result');
-      const percentEl = document.getElementById('percentDisplay');
+  if (value <= 20) {{
+    color = 'green';
+    advice = '<span style="font-size: 2em; color: green;">เสี่ยงต่ำ ปลอดภัย</span>';
+    imgSrc = "data:image/png;base64,{img1_b64}";
+    imgAlt = 'รูปความเสี่ยงต่ำ';
+  }} else if (value <= 40) {{
+    color = '#e67e22';
+    advice = '<span style="font-size: 2em; color: #e67e22;">เสี่ยงปานกลาง</span><br> ' +
+             '<span style="font-size: 1.3em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
+    imgSrc = "data:image/png;base64,{img3_b64}";
+    imgAlt = 'รูปความเสี่ยงปานกลาง';
+  }} else {{
+    color = 'red';
+    advice = '<span style="font-size: 2em; color: red;">เสี่ยงสูง!</span><br>' +
+             '<span style="font-size: 1.3em;">ต้องล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span><br>';
+    imgSrc = "data:image/png;base64,{img0_b64}";
+    imgAlt = 'รูปความเสี่ยงสูง';
+  }}
 
-      let color = '';
-      let advice = '';
-      let imgSrc = '';
-      let imgAlt = '';
+  resultEl.textContent = '';
+  percentEl.innerHTML = '<small>สารตกค้าง</small> ' + value + '%';
+  percentEl.style.color = color;
+  adviceEl.innerHTML = advice + `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
+}}
 
-      if (value <= 20) {{
-        color = 'green';
-        advice = '<span style="font-size: 2em; color: green;">เสี่ยงต่ำ ปลอดภัย</span>';
-        imgSrc = "data:image/png;base64,{img1_b64}";
-        imgAlt = 'รูปความเสี่ยงต่ำ';
-      }} else if (value <= 40) {{
-        color = '#e67e22';
-        advice = '<span style="font-size: 2em; color: #e67e22;">เสี่ยงปานกลาง</span><br> ' +
-                 '<span style="font-size: 1.3em">ควรล้างผลไม้เพิ่ม และตรวจอีกครั้ง</span>';
-        imgSrc = "data:image/png;base64,{img3_b64}";
-        imgAlt = 'รูปความเสี่ยงปานกลาง';
-      }} else {{
-        color = 'red';
-        advice = '<span style="font-size: 2em; color: red;">เสี่ยงสูง!</span><br>' +
-                 '<span style="font-size: 1.3em;">ต้องล้างผลไม้เพิ่มหลายรอบ และตรวจอีกครั้ง</span><br>';
-        imgSrc = "data:image/png;base64,{img0_b64}";
-        imgAlt = 'รูปความเสี่ยงสูง';
-      }}
+function showDefaultState() {{
+  const adviceEl = document.getElementById('advice');
+  const resultEl = document.getElementById('result');
+  const percentEl = document.getElementById('percentDisplay');
 
-      resultEl.textContent = '';
-      percentEl.innerHTML = '<small>สารตกค้าง</small> ' + value + '%';
-      percentEl.style.color = color;
-      adviceEl.innerHTML = advice + `<br><img src="${{imgSrc}}" alt="${{imgAlt}}">`;
-    }}
+  // Push elements slightly down while waiting
+  resultEl.textContent = '';
+  percentEl.innerHTML = '<small>สารตกค้าง</small> --%';
+  percentEl.style.color = '#666';
+  adviceEl.innerHTML = '';
+}}
 
-    function showDefaultState() {{
-      const adviceEl = document.getElementById('advice');
-      const resultEl = document.getElementById('result');
-      const percentEl = document.getElementById('percentDisplay');
-      
-      resultEl.textContent = '';
-      percentEl.innerHTML = '<small>สารตกค้าง</small> --%';
-      percentEl.style.color = '#666';
-      adviceEl.innerHTML = '<span style="font-size: 1.4em; color: #666;">รอข้อมูล...</span>';
-    }}
+// Modal functions
+function openModal() {{
+  document.getElementById('posterModal').style.display = 'flex';
+}}
 
-    function openLink() {{
-      window.open('https://youtube.com/shorts/H2OW4IHmfYM?feature=share/', '_blank');
-    }}
+function closeModal() {{
+  document.getElementById('posterModal').style.display = 'none';
+}}
 
-    function toggleInfo(id, btn) {{
-      const content = document.getElementById(id);
-      const expanded = btn.getAttribute("aria-expanded") === "true";
-      if (expanded) {{
-        content.hidden = true;
-        btn.setAttribute("aria-expanded", "false");
-      }} else {{
-        content.hidden = false;
-        btn.setAttribute("aria-expanded", "true");
-      }}
-    }}
+{call_show_prediction_js}
+</script>
 
-    {call_show_prediction_js}
-  </script>
 </body>
 </html>
 """
 
-# ลดความสูง (โปสเตอร์จะขึ้นมา ไม่ต้อง 1200)
 st.components.v1.html(html_code, height=850, scrolling=True)
 
