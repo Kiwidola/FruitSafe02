@@ -148,6 +148,7 @@ body {{
 .result {{
   text-align: center;
   margin: 20px 0;
+  min-height: 150px; /* keep space for result images/advice */
 }}
 
 .results-value {{
@@ -280,7 +281,8 @@ body {{
 <div class="meta">
   <div class="percent" id="percentDisplay"><small>สารตกค้าง</small> --%</div>
   <div class="button-group">
-    <button class="btn" onclick="openModal()">สารเคมีผลกระทบคืออะไร</button>
+    <button class="btn" onclick="openLink()">วิธีล้างฝรั่ง</button>
+    <button class="btn" onclick="openModal()">ดูโปสเตอร์สารเคมี</button>
   </div>
 </div>
 
@@ -334,7 +336,7 @@ function showDefaultState() {{
   const resultEl = document.getElementById('result');
   const percentEl = document.getElementById('percentDisplay');
 
-  // Push elements slightly down while waiting
+  // push elements down same as result state
   resultEl.textContent = '';
   percentEl.innerHTML = '<small>สารตกค้าง</small> --%';
   percentEl.style.color = '#666';
@@ -350,6 +352,10 @@ function closeModal() {{
   document.getElementById('posterModal').style.display = 'none';
 }}
 
+function openLink() {{
+  window.open('https://youtube.com/shorts/H2OW4IHmfYM?feature=share/', '_blank');
+}}
+
 {call_show_prediction_js}
 </script>
 
@@ -358,4 +364,5 @@ function closeModal() {{
 """
 
 st.components.v1.html(html_code, height=850, scrolling=True)
+
 
