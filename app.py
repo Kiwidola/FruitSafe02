@@ -62,16 +62,21 @@ elif 'last_prediction' in st.session_state and st.session_state.last_prediction 
 else:
     call_show_prediction_js = "showDefaultState();"
 
-# ซ่อน Header / Footer / Menu ของ Streamlit
+# 🔹 ซ่อน Header / Footer / Menu ของ Streamlit และลบ container padding
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
+
     [data-testid="stAppViewContainer"] {
         background-color: #fefae0;
         padding: 0 !important;
         margin: 0 !important;
+    }
+    .block-container {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
     }
     [data-testid="stAppViewBlockContainer"] {
         padding: 0 !important;
@@ -92,7 +97,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# HTML ฝังผลลัพธ์
+# 🔹 HTML ฝังผลลัพธ์
 html_code = f"""
 <!DOCTYPE html>
 <html lang="th">
@@ -125,18 +130,20 @@ html_code = f"""
     }}
 
     .logo {{
-      font-family: 'Merriweather', serif;
-      font-size: 36px;
-      color: #2e7d32;
       text-align: center;
-      margin-bottom: 15px;
-      margin-top: -15px;  /* pull title up */
+      margin-bottom: 10px;
+      margin-top: 0px;  /* flush top */
+    }}
+
+    .logo img {{
+      max-width: 220px;
+      height: auto;
     }}
 
     .results-label {{
       color: #e67e22;
       font-size: 22px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       border-top: 2px solid #c5e1a5;
       border-bottom: 2px solid #c5e1a5;
       padding: 6px 16px;
@@ -148,7 +155,7 @@ html_code = f"""
       text-align: center;
       max-width: 90vw;
       margin-top: 10px;
-      min-height: 120px; /* smaller */
+      min-height: 120px;
     }}
 
     .advice img {{
@@ -199,7 +206,7 @@ html_code = f"""
     .btn {{
       width: 85%;
       max-width: 280px;
-      padding: 15px;
+      padding: 12px;
       border-radius: 12px;
       border: 2px solid #2e7d32;
       background: #fffdf7;
@@ -208,7 +215,7 @@ html_code = f"""
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       font-family: 'Rubik', sans-serif;
-      font-size: 1.1em;
+      font-size: 1em;
     }}
 
     .button-group {{
@@ -217,7 +224,7 @@ html_code = f"""
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       justify-content: center;
     }}
 
@@ -260,13 +267,15 @@ html_code = f"""
     }}
 
     .toggle-section {{
-      margin-top: 5px; /* bring poster up */
+      margin-top: 10px;  /* bring poster higher */
     }}
   </style>
 </head>
 <body>
 
-  <div class="logo">Fruit<br>Safe</div>
+  <div class="logo">
+    <img src="data:image/jpeg;base64,{fruitsafe_b64}" alt="FruitSafe Logo" />
+  </div>
 
   <div class="results-label">ผลการตรวจ</div>
   
@@ -361,5 +370,5 @@ html_code = f"""
 </html>
 """
 
-# Reduce height so poster fits without large scrolling
+# ลดความสูง (โปสเตอร์จะขึ้นมา ไม่ต้อง 1200)
 st.components.v1.html(html_code, height=850, scrolling=True)
