@@ -89,20 +89,6 @@ st.markdown("""
     .stApp > header {
         display: none !important;
     }
-
-    /* --- NEW FIX: remove margin/padding around iframe --- */
-    iframe[title="st.components.v1.html"] {
-        margin: 0 !important;
-        padding: 0 !important;
-        display: block;
-    }
-    [data-testid="stVerticalBlock"] {
-        gap: 0 !important;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -144,7 +130,7 @@ html_code = f"""
       color: #2e7d32;
       text-align: center;
       margin-bottom: 15px;
-      margin-top: 0px;
+      margin-top: -15px;  /* pull title up */
     }}
 
     .results-label {{
@@ -161,8 +147,8 @@ html_code = f"""
       color: #333;
       text-align: center;
       max-width: 90vw;
-      margin-top: 15px;
-      min-height: 180px;
+      margin-top: 10px;
+      min-height: 120px; /* smaller */
     }}
 
     .advice img {{
@@ -183,7 +169,7 @@ html_code = f"""
 
     .result {{
       text-align: center;
-      margin: 30px 0;
+      margin: 20px 0;
     }}
 
     .meta {{
@@ -192,7 +178,7 @@ html_code = f"""
       flex-direction: column;
       align-items: center;
       gap: 15px;
-      margin-top: 30px;
+      margin-top: 20px;
     }}
 
     .percent {{
@@ -261,7 +247,7 @@ html_code = f"""
     }}
 
     .toggle-content {{
-      margin-top: 12px;
+      margin-top: 8px;
       font-size: 1em;
       line-height: 1.4;
       color: #333;
@@ -274,7 +260,7 @@ html_code = f"""
     }}
 
     .toggle-section {{
-      margin-top: 25px;
+      margin-top: 5px; /* bring poster up */
     }}
   </style>
 </head>
@@ -375,4 +361,5 @@ html_code = f"""
 </html>
 """
 
-st.components.v1.html(html_code, height=1200, scrolling=False)
+# Reduce height so poster fits without large scrolling
+st.components.v1.html(html_code, height=850, scrolling=True)
