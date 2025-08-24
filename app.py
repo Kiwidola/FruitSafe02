@@ -36,7 +36,7 @@ def img_to_base64_str(path):
 img0_b64 = img_to_base64_str("guava0.png")
 img1_b64 = img_to_base64_str("guava1.png")
 img3_b64 = img_to_base64_str("guava3.png")
-fruitsafe_b64 = img_to_base64_str("FruitSafe.jpg")
+fruitsafe_b64 = img_to_base64_str("FruitSafe.png")
 poster_b64 = img_to_base64_str("Poster.jpg")
 
 predicted_percent = 0  # ค่าเริ่มต้น
@@ -372,3 +372,4 @@ html_code = f"""
 
 # ลดความสูง (โปสเตอร์จะขึ้นมา ไม่ต้อง 1200)
 st.components.v1.html(html_code, height=850, scrolling=True)
+
