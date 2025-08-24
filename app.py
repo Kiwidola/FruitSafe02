@@ -363,7 +363,8 @@ function openLink() {{
 </html>
 """
 
-st.components.v1.html(html_code, height=850, scrolling=True)
+st.components.v1.html(html_code, height=500, scrolling=True)
+
 
 
 
