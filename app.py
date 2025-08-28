@@ -344,7 +344,7 @@ function showDefaultState() {{
 
   // push elements down same as result state
   resultEl.textContent = '';
-  percentEl.innerHTML = '<small>สารตกค้าง</small> --%';
+  percentEl.innerHTML = '<small>โอกาสสารตกค้างสูงกว่าค่ามาตรฐาน</small> --%';
   percentEl.style.color = '#666';
   adviceEl.innerHTML = '';
 }}
@@ -370,6 +370,7 @@ function openLink() {{
 """
 
 st.components.v1.html(html_code, height=800, scrolling=True)
+
 
 
 
