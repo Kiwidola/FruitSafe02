@@ -18,7 +18,7 @@ creds = Credentials.from_service_account_info(credentials_info, scopes=scope)
 
 # เชื่อมต่อ Google Sheet
 client = gspread.authorize(creds)
-sheet = client.open("FruitSafe01").sheet1
+sheet = client.open("FruitSafe02").sheet1
 
 # ดึงข้อมูลแถวที่ 2 จาก Sheet
 try:
@@ -370,6 +370,7 @@ function openLink() {{
 """
 
 st.components.v1.html(html_code, height=800, scrolling=True)
+
 
 
 
